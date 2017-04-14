@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta content="text/html; charset=UTF-8" http-equiv="content-type">
+    <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <meta charset="UTF-8">
+    <!-- uc强制竖屏 -->
+    <meta name="screen-orientation" content="portrait">
+    <!-- QQ强制竖屏 -->
+    <meta name="x5-orientation" content="portrait">
+    <meta name="x5-orientation" content="portrait">
+    <meta name="screen-orientation" content="portrait">
+    <meta name="x5-orientation" content="portrait">
+    <title></title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="" name="robots">
+    <link rel="stylesheet" href="css/style.css">
+    <script rel="stylesheet" src="js/jquery-1.11.1.min.js"></script>
+</head>
+<body>
+<div id="top"></div>
+<header>
+    <a href="index.html" class="header_left">
+        <img src="images/left.png"/>
+    </a>
+
+    <h1 id="turn_head"></h1>
+</header>
+<div class="addSuccess_content">
+    <div class="addSuccess_wrap">
+        <div class="addSuccess_body">
+            <div class="addsuccess_img">
+                <img src="images/img6.png"/>
+            </div>
+            <p id="msg"></p>
+            <!--<p>时间</p>-->
+        </div>
+    </div>
+    <div class="addSuccess_btn">
+        <input type="button" value="完成" id="return_btn"/>
+    </div>
+</div>
+<script>
+    $(function () {
+
+        var height = $(window).height();
+        var uid = getQueryString("uid");
+        $(".addSuccess_content").css('height', height - 60);
+        var money = getQueryString("money");
+        var rcd = getQueryString("rcd");
+        var token = getQueryString("token");
+
+        if (rcd == 0) {
+            $("#msg").html("成功转入" + money + "元").css('color', '#0000ff');
+            $('#turn_head').html("转入成功");
+            window.webkit.messageHandlers.turnInSuccess.postMessage({money:money});
+        } else if (rcd == 1) {
+            $("#msg").html("余额不足").css('color', '#ff0000');
+            $('#turn_head').html("余额不足");
+        } else if (rcd == 2) {
+            $("#msg").html("输入的金额格式有误").css('color', '#ff0000');
+            $('#turn_head').html("输入的金额格式有误");
+        } else if (rcd == 3) {
+            $("#msg").html("存入期限有误").css('color', '#ff0000');
+            $('#turn_head').html("存入期限有误");
+        }else if(rcd==4){
+            $("#msg").html("网络超时").css('color','#ff0000');
+            $('#turn_head').html("网络超时");
+        }else if(rcd==5){
+            $("#msg").html("购买金额不得小于100").css('color','#ff0000');
+            $('#turn_head').html("购买金额不得小于100");
+        }
+
+        $('#return_btn').click(function () {
+            if ((navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i))) {
+                window.location.href = "./index.html?token=" + token+"&uid="+uid;
+            }
+        });
+        //获取URL参数值
+        function getQueryString(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null) return unescape(r[2]);
+            return null;
+        }
+    })
+</script>
+</body>
+</html>

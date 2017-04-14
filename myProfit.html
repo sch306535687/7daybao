@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta content="text/html; charset=UTF-8" http-equiv="content-type">
+    <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <meta charset="UTF-8">
+    <title></title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <link rel="stylesheet" href="css/style.css">
+    <script rel="stylesheet" src="js/jquery-1.11.1.min.js"></script>
+</head>
+<body>
+<div id="top"></div>
+<header>
+    <a href="index.html" class="header_left">
+        <img src="images/left.png"/>
+    </a>
+
+    <h1>我的收益</h1>
+</header>
+<div class="myProfit">
+    <div class="myProfit_icon">
+        <div class="myProfit_icon_left">
+            <a href="" style="color: #000;"><img src="images/4.png" /><p>理财明细</p></a>
+        </div>
+        <div class="myProfit_icon_center">
+            <a href=""><img src="images/10.png" /><p>已到期</p></a>
+        </div>
+        <div class="myProfit_icon_right active">
+            <a href=""><img src="images/3.png" /><p>我的收益</p></a>
+        </div>
+    </div>
+    <div class="rate_container">
+
+    </div>
+    <div class="myProfit_bottom">
+        <div>
+            <img src="images/8.png" />
+            <span>随存随取</span>
+        </div>
+        <div>
+            <img src="images/7.png" />
+            <span>天天加息</span>
+        </div>
+        <div>
+            <img src="images/10.png" />
+            <span>100元起存</span>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        var token = getQueryString("token");
+        var uid = getQueryString("uid");
+        var height = $(window).height();
+        $('.header_left').attr("href", "index.html?token=" + token+"&uid="+uid);
+        $('.myProfit_icon_left a').attr("href", "manageMoney.html?token=" + token+"&uid="+uid);
+        $('.myProfit_icon_center a').attr("href", "finishManageMoney.html?token=" + token+"&uid="+uid);
+        $('.myProfit_icon_right a').attr("href", "myProfit.html?token=" + token+"&uid="+uid);
+        $(".myProfit").css('height', height - 61);
+
+        //提交的参数
+        var j = {
+            "AppId": "B207E275A16C41CB903A3E1CF1539995",
+            "CCD": 7007,
+            "Token": token,
+            "Type": 1
+        };
+        $.ajax({
+            url: 'http://120.76.97.98:33512/UserService',
+            type: 'POST',
+            async: true,
+            contentType: "application/json; charset=utf-8",
+            processData: false,
+            data: JSON.stringify(j),
+            timeout: 5000,
+            dataType: 'json',
+            success: function (data, textStatus, jqXHR) {
+                var d = eval(data);
+                var dataArray = d.data;
+                var result = '';
+                for (var i = 0; i < dataArray.length; i++) {
+
+                    console.log(dataArray[i].INCREASE_NAME.split('-')[1].split('')[0]);
+                    var month = dataArray[i].INCREASE_NAME.split('-')[1].split('')[0];
+                    result += '<div class="myProfit_cout">\
+                                <img src="images/9.png" />\
+                                <p class="myProfit_rate">'+dataArray[i].FEE_RATE+''+dataArray[i].UNIT+'</p>\
+                                <p class="myProfit_year">年化收益</p>\
+                                <a href="turn_in.html?token='+token+'&month='+month+'" class="myProfit_touzi">立即投资</a>\
+                                <p class="myProfit_countMoney">本期总金额'+dataArray[i].AMOUNT+'元</p>\
+                                <a href="manageMoney.html?token='+token+'" class="myProfit_turn_manageMoney">往期项目 ></a>\
+                                </div>\
+                                <div class="rate_container_line"></div>'
+                }
+                $('.rate_container').append(result)
+            },
+            error: function (xhr, textStatus) {
+                console.log('错误');
+            },
+            complete: function () {
+                console.log('结束')
+            }
+        });
+
+
+        //获取URL参数值
+        function getQueryString(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null) return unescape(r[2]);
+            return null;
+        }
+
+    })
+
+
+</script>
+</body>
+</html>

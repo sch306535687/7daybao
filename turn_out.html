@@ -1,0 +1,168 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta content="text/html; charset=UTF-8" http-equiv="content-type">
+    <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <meta charset="UTF-8">
+    <!-- uc强制竖屏 -->
+    <meta name="screen-orientation" content="portrait">
+    <!-- QQ强制竖屏 -->
+    <meta name="x5-orientation" content="portrait">
+    <meta name="x5-orientation" content="portrait">
+    <meta name="screen-orientation" content="portrait">
+    <meta name="x5-orientation" content="portrait">
+    <title></title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="" name="robots">
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/style.css">
+    <script rel="stylesheet" src="js/jquery-1.11.1.min.js"></script>
+    <script rel="stylesheet" src="js/bootstrap.min.js"></script>
+
+</head>
+<body>
+<div id="top"></div>
+<header>
+    <a href="index.html" class="header_left">
+        <img src="images/left.png" />
+    </a>
+    <h1>转出</h1>
+</header>
+<div class="getCash_content">
+    <div class="getCash_car">
+        <a>
+            <div class="selectCar_list_left">
+                <img src="images/img2.png" />
+            </div>
+            <div class="selectCar_list_text">
+                <p>活期余额</p>
+                <span id="balance"></span>
+            </div>
+            <div class="selectCar_list_right">
+                <img src="images/right.png" />
+            </div>
+        </a>
+    </div>
+    <div class="getCash_money">
+        <!--<span>提现金额</span>-->
+        <div class="getCash_input">
+            <span>金额</span>
+            <input id="money" type="number"  />
+        </div>
+        <!--<p>可用余额0.00元</p>-->
+    </div>
+    <div class="selectCar_btn">
+        <input id="btn" type="button" value="下一步" disabled="disabled" />
+    </div>
+</div>
+
+
+<script>
+    $(function(){
+
+        var uid = getQueryString("uid");
+        var height = $(window).height();
+        var money = 0;
+        $(".getCash_content").css('height',height-60);
+
+        //判断输入框有无内容
+        var oInput=$('.getCash_input').find('input');
+        var timer=setInterval(function(){
+            if(oInput.val()!=""){
+                money = $('#money').val();
+                $('.selectCar_btn').find('input').removeAttr('disabled');
+                $('.selectCar_btn').find('input').css('backgroundColor','#1892ff').css('color','white');
+            }else{
+                $('.selectCar_btn').find('input').css('backgroundColor','#c8c8c8').css('color','#969696');
+                $('.selectCar_btn').find('input').attr('disabled','disabled');
+            }
+        },500);
+
+        //点击切换银行卡
+       /* var car = $('.mo_car');
+        for( var i=0;i<car.length;i++ ){
+            (function(a){
+                car[a].onclick=function(){
+                    car.find('.mo_p').css('display','none');
+                    $(this).find('.mo_p').css('display','block');
+                }
+            })(i)
+        }*/
+        var token = getQueryString("token");
+	$('.header_left').attr("href","index.html?token="+token+"&uid="+uid);
+
+        //活期余额
+        var y = {
+            "AppId": "B207E275A16C41CB903A3E1CF1539995",
+            "CCD": 7005 ,
+            "Token": token
+        };
+        $.ajax({
+            url:'http://120.76.97.98:33512/UserService',
+            type:'POST',
+            async:true,
+            contentType: "application/json; charset=utf-8",
+            processData: false,
+            data:JSON.stringify(y),
+            timeout:5000,
+            dataType:'json',
+            success:function(data,textStatus,jqXHR){
+                var d = eval(data);
+                $('#balance').html("活期账户可用金额"+d.BALANCE+"元")
+            },
+            error:function(xhr,textStatus){
+                console.log('错误');
+            },
+            complete:function(){
+                console.log('结束');
+            }
+        });
+        //转出金额
+        $('#btn').click(function(){
+            //提交的参数
+            var j = {
+                "AppId": "B207E275A16C41CB903A3E1CF1539995",
+                "CCD": 7006 ,
+                "Token": token,
+                "MoneyCount":money
+            };
+            $.ajax({
+                url:'http://120.76.97.98:33512/UserService',
+                type:'POST',
+                async:true,
+                contentType: "application/json; charset=utf-8",
+                processData: false,
+                data:JSON.stringify(j),
+                timeout:5000,
+                dataType:'json',
+                success:function(data,textStatus,jqXHR){
+                    var d = eval(data);
+                    console.log("数据"+ d.RCD);
+                    var rcd = d.RCD;
+                    $('#money').val("");//清空输入框
+                    window.location.href="./turn_out_tips.html?rcd="+rcd+"&money="+money+"&token="+token+"&uid="+uid;
+                   
+                },
+                error:function(xhr,textStatus){
+                    console.log('错误');
+                },
+                complete:function(){
+                    console.log('结束')
+                }
+            })
+        });
+
+        //获取URL参数值
+        function getQueryString(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null) return unescape(r[2]); return null;
+        }
+
+    })
+</script>
+</body>
+</html>

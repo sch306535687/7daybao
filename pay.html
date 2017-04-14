@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta content="text/html; charset=UTF-8" http-equiv="content-type">
+    <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <title></title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <link rel="stylesheet" href="css/progress.css">
+    <link rel="stylesheet" href="css/style.css">
+    <script rel="stylesheet" src="js/jquery-1.11.1.min.js"></script>
+</head>
+<body>
+<div class="pay_container">
+    <div class="pay_top"><img src="images/pay02.png" /></div>
+    <div class="pay_input">
+        <span>付款金额:</span>
+        <input id="pay_val"  type="number" />
+    </div>
+    <div class="pay_msg"></div>
+    <div class="pay_bg">
+        <input class="pay_btn" type="button" value="确认支付">
+    </div>
+</div>
+<script>
+    $(function () {
+
+        var height = $(window).height();
+        var width = $(window).width();
+        $(".pay_container").css('height', height);
+        $("#pay_val").focus();//获取焦点
+        $("#pay_val").css("width",width-100);//输入框长度
+        $(".pay_btn").click(function(){
+            var uid = getQueryString("uid");
+            var value = $("#pay_val").val();
+            if(value==""){
+                $(".pay_msg").html("输入框不能为空");
+                return;
+            }
+            ajax(value,uid);
+        });
+
+        function ajax(value,uid){
+            //提交的参数
+            var j = {
+                "AppId": "B207E275A16C41CB903A3E1CF1539995",
+                "CCD": "6005",
+                "Amount": value,
+                "TableNum": uid,
+                "Type": 2,
+                "UID": uid
+            };
+            $.ajax({
+                url: "http://120.76.97.98:33512/UserService",
+                type: 'POST',
+                async: true,
+                contentType: "application/json; charset=utf-8",
+                processData: false,
+                data: JSON.stringify(j),
+                timeout: 5000,
+                dataType: 'json',
+                success: function (data, textStatus, jqXHR) {
+                    var d = eval(data);
+                    console.log(d.RCD);
+                    if(d.RCD!=0){
+                        $(".pay_msg").html("付款失败");
+                        $('#pay_val').val("");//清空输入框
+                        console.log(value);
+                    }else {
+
+                        var url = d.url;
+                        if((navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i))) {
+                            window.location.href=url;
+                        }
+                    }
+
+                },
+                error: function (xhr, textStatus) {
+                    console.log('错误');
+                },
+                complete: function () {
+                    console.log('结束')
+                }
+            });
+        }
+
+
+        //获取URL参数值
+        function getQueryString(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null) return unescape(r[2]);
+            return null;
+        }
+
+    })
+
+
+</script>
+</body>
+</html>

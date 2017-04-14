@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta content="text/html; charset=UTF-8" http-equiv="content-type">
+    <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <title>店铺入住7天富申请</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <link href="css/scs.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="css/style.css">
+    <script rel="stylesheet" src="js/jquery-1.11.1.min.js"></script>
+</head>
+<body>
+<div class="application_container">
+    <div class="application_row">
+        <div class="application_input">
+            <span>手机号</span>
+            <input id="tel" type="text" value="请输入手机号"/>
+        </div>
+        <div class="application_input">
+            <span>店铺名称</span>
+            <input id="shop" type="text" value="请输入店铺名称"/>
+        </div>
+        <div class="application_input">
+            <span>店铺地址</span>
+            <input id="shopAddr" type="text" value="请输入店铺地址"/>
+        </div>
+        <div id="myAddrs" class="application_input">
+            <span>所在城市</span>
+            <input id="city" type="text" readonly placeholder="Click me to pick an address" name="addr"
+                   data-key="1-36-37" value="北京 北京市 东城区"/>
+        </div>
+    </div>
+    <div class="application_row">
+        <div class="application_input">
+            <span>银行卡号</span>
+            <input id="cardNumber" type="text" value="请输入银行卡号"/>
+        </div>
+        <div class="application_input">
+            <span>银行名称</span>
+            <input id="bankName" type="text" value="请输入银行名称"/>
+        </div>
+        <div class="application_input">
+            <span>开户行</span>
+            <input id="bankName2" type="text" value="请输入开户行"/>
+        </div>
+        <div class="application_input">
+            <span>开户名</span>
+            <input id="cardName" type="text" value="请输入开户名"/>
+        </div>
+        <div class="application_input">
+            <span>账户类型</span>
+            <select class="application_option">
+                <option value="个体户">个体户</option>
+                <option value="有限责任公司">有限责任公司</option>
+                <option value="有限责任公司">企业非法人</option>
+            </select>
+        </div>
+        <div class="application_input">
+            <span>S/N</span>
+            <input id="sn" type="text" value="请输入S/N"/>
+        </div>
+        <div class="application_input">
+            <span>代理商编号</span>
+            <input id="dNumber" type="text" value="请输入代理商手机号"/>
+        </div>
+    </div>
+    <div class="application_msg"></div>
+    <div class="application_next_btn">
+        <input type="button" value="下一步"/>
+    </div>
+    <div class="application_model">
+        <!--<p class="application_model_bankname">平安银行</p>-->
+    </div>
+    <div class="application_model2">
+        <!--<p class="application_model_bankname">平安银行</p>-->
+    </div>
+</div>
+<script src="js/jquery.scs.min.js"></script>
+<script src="js/CNAddrArr.min.js"></script>
+<script type="text/javascript">
+    $(function () {
+
+        var height = $(window).height();
+        var width = $(window).width();
+        var countType = "个体户";//账户类型
+        //$(".application_container").css('height', height);
+        $(".application_input").each(function () {
+            $(this).find('input[type="text"]').css('width', width - 110);
+            $(this).find('input[type="text"]').focus(function () {
+                $(this).val("").css('color','#000');
+                $(".application_model").css('display', 'none');
+                $(".application_model2").css('display', 'none');
+
+            });
+        });
+        //当输入框值改变时
+        $('#bankName').bind('input propertychange', function () {
+            ajaxMainBank($(this).val());
+        });
+        $('#bankName2').bind('input propertychange', function () {
+            var page = 1;
+            var value = $(this).val();
+            $(".application_model2").html("");
+            ajaxBank(value, page);
+            //滚动到底部
+            $(".application_model2").on("scroll", function () {
+                var $this = $(this),
+                        viewH = $(this).height(),//可见高度
+                        contentH = $(this).get(0).scrollHeight,//内容高度
+                        scrollTop = $(this).scrollTop();//滚动高度
+                if ((contentH - viewH) == scrollTop) {
+                    page++;
+                    ajaxBank(value, page);
+                }
+            });
+        });
+
+        //给动态添加的元素绑定监听事件
+        $(".application_model").on("click", "p", function () {
+            $('#bankName').val($(this).html());
+            $(".application_model").css('display', 'none');
+        });
+        $(".application_model2").on("click", "p", function () {
+            $('#bankName2').val($(this).html());
+            $(".application_model2").css('display', 'none');
+        });
+
+        //下拉选择框改变时
+        $(".application_option").change(function () {
+            countType = $(this).val();
+        });
+
+        $('.application_next_btn').find('input').click(function () {
+            var tel = $('#tel').val();//电话号码
+            var shop = $('#shop').val();//店铺名称
+            var shopAddr = $('#shopAddr').val();//店铺地址
+            var city = $('#city').val();//所在城市
+            var cardNumber = $('#cardNumber').val();//银行卡号
+            var bankName = $('#bankName').val();//银行名称
+            var bankName2 = $('#bankName2').val();//开户行
+            var cardName = $('#cardName').val();//开户名
+            var sn = $('#sn').val();//sn
+            var dNumber = $('#dNumber').val();//代理商编号
+
+            if (tel == "") {
+                $(".application_msg").html("请输入手机号");
+                return;
+            } else if (shop == "") {
+                $(".application_msg").html("请输入店铺名称");
+                return;
+            } else if (shopAddr == "") {
+                $(".application_msg").html("请输入店铺地址");
+                return;
+            } else if (city == "") {
+                $(".application_msg").html("请输入所在城市");
+                return;
+            } else if (cardNumber == "") {
+                $(".application_msg").html("请输入银行卡号");
+                return;
+            } else if (bankName == "") {
+                $(".application_msg").html("请输入银行名称");
+                return;
+            } else if (bankName2 == "") {
+                $(".application_msg").html("请输入开户行");
+                return;
+            } else if (countType == "") {
+                $(".application_msg").html("请选择账户类型");
+                return;
+            } else if (sn == "") {
+                $(".application_msg").html("请输入SN");
+                return;
+            } else if (dNumber == "") {
+                $(".application_msg").html("请输入代理商编号");
+                return;
+            } else {
+                if (!checkPhone(tel)) {
+                    $(".application_msg").html("手机号格式有误，请重填");
+                    return;
+                } else if (!checkData(sn)) {
+                    $(".application_msg").html("SN格式有误，请重填");
+                    return;
+                } else if (!checkPhone(dNumber)) {
+                    $(".application_msg").html("代理商编号格式有误，请重填");
+                    return;
+                } else {
+                    if (!checkData(sn)) {
+                        $(".application_msg").html("sn格式有误，请重填");
+                        return;
+                    }else {
+                        checkSN(tel, shop, shopAddr, city, cardNumber
+                                , bankName, bankName2, cardName, sn, dNumber, countType);
+                    }
+
+                }
+
+            }
+
+        });
+
+        function ajaxTel(url, tel, shop, shopAddr, city, cardNumber
+                , bankName, bankName2, cardName, sn, dNumber, countType) {
+            $.ajax({
+                url: url,
+                type: 'POST',
+                async: true,
+                data: {username: tel},
+                timeout: 5000,
+                dataType: 'json',
+                success: function (data, textStatus, jqXHR) {
+                    var d = eval(data);
+                    //console.log(d);
+                    if (d.errcode == "10006") {
+                        $(".application_msg").html("用户名已存在,请重新输入");
+                        $('#tel').val("");
+                        return;
+                    } else {
+                        ajaxNumber("http://www.7tianfu.cn:8080//SevenDayRich/wechat/existAg", tel, shop, shopAddr, city, cardNumber
+                                , bankName, bankName2, cardName, sn, dNumber, countType);
+                    }
+
+                },
+                error: function (xhr, textStatus) {
+                    console.log('错误');
+                },
+                complete: function () {
+                    console.log('结束')
+                }
+            });
+        }
+
+        function ajaxNumber(url, tel, shop, shopAddr, city, cardNumber
+                , bankName, bankName2, cardName, sn, dNumber, countType) {
+            $.ajax({
+                url: url,
+                type: 'POST',
+                async: true,
+                data: {mainid: dNumber},
+                timeout: 5000,
+                dataType: 'json',
+                success: function (data, textStatus, jqXHR) {
+                    var d = eval(data);
+                    console.log(d);
+                    if (d.errcode == "-1") {
+                        $(".application_msg").html("该代理商不存在");
+                        return;
+                    } else if (d.errcode == "0") {
+                        if ((navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i))) {
+                            window.location.href = "uploadImg.html?tel=" + tel + "&shop=" + shop + "&shopAddr="
+                                    + shopAddr + "&city=" + city + "&cardNumber=" + cardNumber
+                                    + "&bankName=" + bankName + "&bankName2=" + bankName2 + "&cardName="
+                                    + cardName + "&sn=" + sn + "&dNumber=" + dNumber + "&countType=" + countType;
+                        }
+                    }
+
+                },
+                error: function (xhr, textStatus) {
+                    console.log('错误');
+                },
+                complete: function () {
+                    console.log('结束')
+                }
+            });
+        }
+
+        function ajaxMainBank(bankName) {
+            $.ajax({
+                url: "http://www.7tianfu.cn:8080/SevenDayRich/wechat/getMainBankName",
+                type: 'POST',
+                async: true,
+                data: {bankName: bankName},
+                timeout: 5000,
+                dataType: 'json',
+                success: function (data, textStatus, jqXHR) {
+                    var d = eval(data);
+                    if (d.length > 0) {
+                        $('.application_model').html("").css('display', 'block');
+
+                        var result = "";
+                        var len = d.length;
+                        for (var i = 0; i < len; i++) {
+                            //console.log(d[i].bankname);
+                            result += '<p>' + d[i].bankname + '</p>';
+                        }
+                        $('.application_model').append(result);
+                        $(window).scrollTop(360);
+                    }
+
+                },
+                error: function (xhr, textStatus) {
+                },
+                complete: function () {
+                }
+            });
+        }
+
+        function ajaxBank(bankName, offset) {
+            $.ajax({
+                url: "http://www.7tianfu.cn:8080/SevenDayRich/wechat/getBankName",
+                type: 'POST',
+                async: true,
+                data: {bankName: bankName, offset: offset},
+                timeout: 5000,
+                dataType: 'json',
+                success: function (data, textStatus, jqXHR) {
+                    var d = eval(data);
+                    var result = "";
+                    if (d.length > 0) {
+                        $('.application_model2').css('display', 'block');
+                        var len = d.length;
+                        for (var i = 0; i < len; i++) {
+                            result += '<p>' + d[i].bankname + '</p>';
+                        }
+                        $('.application_model2').append(result);
+                        $(window).scrollTop(360);
+                    }
+                },
+                error: function (xhr, textStatus) {
+                },
+                complete: function () {
+                }
+            });
+        }
+
+        //检测SN是否存在
+        function checkSN(tel, shop, shopAddr, city, cardNumber
+                , bankName, bankName2, cardName, sn, dNumber, countType){
+            $.ajax({
+                url: "http://www.7tianfu.cn:8080/SevenDayRich/wechat/existSN",
+                type: 'POST',
+                async: true,
+                data: {sn: sn},
+                timeout: 5000,
+                dataType: 'json',
+                success: function (data, textStatus, jqXHR) {
+                    var d = eval(data);
+                    console.log(d);
+                    if(d.errcode==0){
+                        ajaxTel("http://www.7tianfu.cn:8080/SevenDayRich/wechat/notExistUser", tel, shop, shopAddr, city, cardNumber
+                                , bankName, bankName2, cardName, sn, dNumber, countType);
+                    }else {
+                        $(".application_msg").html("该sn码不存在或被占用");
+                    }
+                },
+                error: function (xhr, textStatus) {
+                },
+                complete: function () {
+                }
+            });
+        }
+
+        //检测手机号
+        function checkPhone(phone) {
+            if (!(/^1[34578]\d{9}$/.test(phone))) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+
+        //检测数字和字母
+        function checkData(number) {
+            if (!(/[0-9a-zA-Z]/.test(number))) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+
+        /**
+         * 通过数组id获取地址列表数组
+         *
+         * @param {Number} id
+         * @return {Array}
+         */
+        function getAddrsArrayById(id) {
+            var results = [];
+            if (addr_arr[id] != undefined)
+                addr_arr[id].forEach(function (subArr) {
+                    results.push({
+                        key: subArr[0],
+                        val: subArr[1]
+                    });
+                });
+            else {
+                return;
+            }
+            return results;
+        }
+
+        /**
+         * 通过开始的key获取开始时应该选中开始数组中哪个元素
+         *
+         * @param {Array} StartArr
+         * @param {Number|String} key
+         * @return {Number}
+         */
+        function getStartIndexByKeyFromStartArr(startArr, key) {
+            var result = 0;
+            if (startArr != undefined)
+                startArr.forEach(function (obj, index) {
+                    if (obj.key == key) {
+                        result = index;
+                        return false;
+                    }
+                });
+            return result;
+        }
+
+        //bind the click event for 'input' element
+        $("#myAddrs").click(function () {
+            var PROVINCES = [],
+                    startCities = [],
+                    startDists = [];
+            //Province data，shall never change.
+            addr_arr[0].forEach(function (prov) {
+                PROVINCES.push({
+                    key: prov[0],
+                    val: prov[1]
+                });
+            });
+            //init other data.
+            var $input = $(this).find('input'),
+                    dataKey = $input.attr("data-key"),
+                    provKey = 1, //default province 北京
+                    cityKey = 36, //default city 北京
+                    distKey = 37, //default district 北京东城区
+                    distStartIndex = 0, //default 0
+                    cityStartIndex = 0, //default 0
+                    provStartIndex = 0; //default 0
+
+            if (dataKey != "" && dataKey != undefined) {
+                var sArr = dataKey.split("-");
+                if (sArr.length == 3) {
+                    provKey = sArr[0];
+                    cityKey = sArr[1];
+                    distKey = sArr[2];
+
+                } else if (sArr.length == 2) { //such as 台湾，香港 and the like.
+                    provKey = sArr[0];
+                    cityKey = sArr[1];
+                }
+                startCities = getAddrsArrayById(provKey);
+                startDists = getAddrsArrayById(cityKey);
+                provStartIndex = getStartIndexByKeyFromStartArr(PROVINCES, provKey);
+                cityStartIndex = getStartIndexByKeyFromStartArr(startCities, cityKey);
+                distStartIndex = getStartIndexByKeyFromStartArr(startDists, distKey);
+            }
+            var navArr = [{//3 scrollers, and the title and id will be as follows:
+                title: "省",
+                id: "scs_items_prov"
+            }, {
+                title: "市",
+                id: "scs_items_city"
+            }, {
+                title: "区",
+                id: "scs_items_dist"
+            }];
+            SCS.init({
+                navArr: navArr,
+                onOk: function (selectedKey, selectedValue) {
+                    $input.val(selectedValue).attr("data-key", selectedKey);
+                }
+            });
+            var distScroller = new SCS.scrollCascadeSelect({
+                el: "#" + navArr[2].id,
+                dataArr: startDists,
+                startIndex: distStartIndex
+            });
+            var cityScroller = new SCS.scrollCascadeSelect({
+                el: "#" + navArr[1].id,
+                dataArr: startCities,
+                startIndex: cityStartIndex,
+                onChange: function (selectedItem, selectedIndex) {
+                    distScroller.render(getAddrsArrayById(selectedItem.key), 0); //re-render distScroller when cityScroller change
+                }
+            });
+            var provScroller = new SCS.scrollCascadeSelect({
+                el: "#" + navArr[0].id,
+                dataArr: PROVINCES,
+                startIndex: provStartIndex,
+                onChange: function (selectedItem, selectedIndex) { //re-render both cityScroller and distScroller when provScroller change
+                    cityScroller.render(getAddrsArrayById(selectedItem.key), 0);
+                    distScroller.render(getAddrsArrayById(cityScroller.getSelectedItem().key), 0);
+                }
+            });
+
+        });
+
+    });
+</script>
+</body>
+</html>

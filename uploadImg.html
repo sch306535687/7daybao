@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta content="text/html; charset=UTF-8" http-equiv="content-type">
+    <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <title>上传图片</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/style.css">
+    <script rel="stylesheet" src="js/jquery-1.11.1.min.js"></script>
+    <script rel="stylesheet" src="js/bootstrap.min.js"></script>
+    <script rel="stylesheet" src="js/ajaxfileupload.js"></script>
+    <style type="text/css">
+        .modal-dialog {
+            width: 60%;
+            left: 20%;
+            bottom: 45%;
+        }
+        .modal-content {
+            border-radius: 10px;
+        }
+        .modal-header {
+            padding: 5px;
+            border: none;
+        }
+        .modal-title {
+            font-weight: 600;
+            font-family: "黑体";
+            text-align: center;
+        }
+        .modal-body {
+            padding: 5px;
+            font-weight: 500;
+            font-family: "黑体";
+            text-align: center;
+        }
+        .modal-footer {
+            padding: 5px;
+            color: #138fe9;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div class="upload_img_container">
+    <!--<form id="dataForm" action="" method="post"
+          enctype="multipart/form-data" style="display: none">
+        <input id="file_upload1" type="file" name="file" style="display: none"/>
+        <input id="file_upload2" type="file" name="file" style="display: none"/>
+        <input id="file_upload3" type="file" name="file" style="display: none"/>
+        <input id="file_upload4" type="file" name="file" style="display: none"/>
+        <input id="file_upload5" type="file" name="file" style="display: none"/>
+        <input id="file_upload6" type="file" name="file" style="display: none"/>
+        <input type="submit" value="提交"/>
+    </form>-->
+    <input id="file_upload1" type="file" name="file" style="display: none"/>
+    <input id="file_upload2" type="file" name="file" style="display: none"/>
+    <input id="file_upload3" type="file" name="file" style="display: none"/>
+    <input id="file_upload4" type="file" name="file" style="display: none"/>
+    <input id="file_upload5" type="file" name="file" style="display: none"/>
+    <input id="file_upload6" type="file" name="file" style="display: none"/>
+    <input id="file_upload7" type="file" name="file" style="display: none"/>
+    <input id="file_upload8" type="file" name="file" style="display: none"/>
+    <input id="file_upload9" type="file" name="file" style="display: none"/>
+    <input id="file_upload10" type="file" name="file" style="display: none"/>
+    <div class="upload_normal">
+        <p><span style="color: red;">*</span>添加身份证正面照片</p>
+
+        <div class="image_container">
+            <img id="preview1" src="images/upload_img.png" width="60" height="60"/>
+        </div>
+    </div>
+    <div class="upload_normal">
+        <p><span style="color: red;">*</span>添加身份证反面照片</p>
+
+        <div class="image_container">
+            <img id="preview2" src="images/upload_img.png" width="60" height="60"/>
+        </div>
+    </div>
+    <div class="upload_normal">
+        <p><span style="color: red;">*</span>添加手持身份证正面照片</p>
+
+        <div class="image_container">
+            <img id="preview3" src="images/upload_img.png" width="60" height="60"/>
+        </div>
+    </div>
+    <div class="upload_normal">
+        <p><span style="color: red;">*</span>添加银行卡正面照片</p>
+
+        <div class="image_container">
+            <img id="preview4" src="images/upload_img.png" width="60" height="60"/>
+        </div>
+    </div>
+    <div class="upload_normal">
+        <p><span style="color: red;">*</span>添加银行卡反面照片</p>
+
+        <div class="image_container">
+            <img id="preview5" src="images/upload_img.png" width="60" height="60"/>
+        </div>
+    </div>
+    <div class="upload_normal">
+        <p><span style="color: red;">*</span>添加手持银行卡照片</p>
+
+        <div class="image_container">
+            <img id="preview6" src="images/upload_img.png" width="60" height="60"/>
+        </div>
+    </div>
+    <div class="upload_normal">
+        <p>营业执照(可选)</p>
+
+        <div class="image_container">
+            <img id="preview7" src="images/upload_img.png" width="60" height="60"/>
+        </div>
+    </div>
+    <div class="upload_normal">
+        <p>开户许可证(可选)</p>
+
+        <div class="image_container">
+            <img id="preview8" src="images/upload_img.png" width="60" height="60"/>
+        </div>
+    </div>
+    <div class="upload_normal">
+        <p>组织机构代码证(可选)</p>
+
+        <div class="image_container">
+            <img id="preview9" src="images/upload_img.png" width="60" height="60"/>
+        </div>
+    </div>
+    <div class="upload_normal">
+        <p>税务登记证(可选)</p>
+
+        <div class="image_container">
+            <img id="preview10" src="images/upload_img.png" width="60" height="60"/>
+        </div>
+    </div>
+    <div class="upload_img_btn">
+        <input id="sub" type="submit" value="提交"/>
+    </div>
+
+</div>
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">
+                    警告
+                </h4>
+            </div>
+            <div class="modal-body">
+                你还有必填项未填写
+            </div>
+            <div class="modal-footer" data-dismiss="modal">
+                确定
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<script type="text/javascript">
+    $(function () {
+
+        var height = $(window).height();
+        $(".upload_img_container").css('height', height);
+
+        //监听添加图片点击事件
+        $('#preview1').click(function () {
+            fileChange("preview1", "file_upload1");
+        });
+        $('#preview2').click(function () {
+            fileChange("preview2", "file_upload2");
+        });
+        $('#preview3').click(function () {
+            fileChange("preview3", "file_upload3");
+        });
+        $('#preview4').click(function () {
+            fileChange("preview4", "file_upload4");
+        });
+        $('#preview5').click(function () {
+            fileChange("preview5", "file_upload5");
+        });
+        $('#preview6').click(function () {
+            fileChange("preview6", "file_upload6");
+        });
+        $('#preview7').click(function () {
+            fileChange("preview7", "file_upload7");
+        });
+        $('#preview8').click(function () {
+            fileChange("preview8", "file_upload8");
+        });
+        $('#preview9').click(function () {
+            fileChange("preview9", "file_upload9");
+        });
+        $('#preview10').click(function () {
+            fileChange("preview10", "file_upload10");
+        });
+
+        //添加图片
+        function fileChange(preview, file_upload) {
+            $("#" + file_upload).click();
+            $("#" + file_upload).change(function () {
+                var $file = $(this);
+                var fileObj = $file[0];
+                var windowURL = window.URL || window.webkitURL;
+                var dataURL;
+                var $img = $("#" + preview);
+                if (fileObj && fileObj.files && fileObj.files[0]) {
+                    dataURL = windowURL.createObjectURL(fileObj.files[0]);
+                    $img.attr('src', dataURL);
+                } else {
+                    dataURL = $file.val();
+                    var imgObj = document.getElementById(preview);
+                    // 两个坑:
+                    // 1、在设置filter属性时，元素必须已经存在在DOM树中，动态创建的Node，也需要在设置属性前加入到DOM中，先设置属性在加入，无效；
+                    // 2、src属性需要像下面的方式添加，上面的两种方式添加，无效；
+                    imgObj.style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=scale)";
+                    imgObj.filters.item("DXImageTransform.Microsoft.AlphaImageLoader").src = dataURL;
+                }
+
+            });
+        }
+
+        var tel = getQueryString("tel");//电话号码
+        var shop = getQueryString("shop");//店铺名称
+        var shopAddr = getQueryString("shopAddr");//店铺地址
+        var city = getQueryString("city");//所在城市
+        var cardNumber = getQueryString("cardNumber");//银行卡号
+        var bankName = getQueryString("bankName");//银行名称
+        var bankName2 = getQueryString("bankName2");//开户行
+        var cardName = getQueryString("cardName");//开户名
+        var sn = getQueryString("sn");//sn
+        var dNumber = getQueryString("dNumber");//代理商编号
+        var countType = getQueryString("countType");//账户类型
+
+        //提交数据
+        $('.upload_img_btn').find('input').click(function () {
+            //$('form').submit();
+            if($('#file_upload1').val()==""||$('#file_upload2').val()==""||$('#file_upload3').val()==""
+            ||$('#file_upload4').val()==""||$('#file_upload5').val()==""||$('#file_upload6').val()==""){
+
+                $('#myModal').modal();
+
+            }else {
+                ajaxFileUpload();
+            }
+        });
+        function ajaxFileUpload(){
+            $.ajaxFileUpload({
+                url: 'http://www.7tianfu.cn:8080/SevenDayRich/wechat/regUser',
+                type: 'post',
+                data : {
+                    username : tel,
+                    niname : shop,
+                    addr : shopAddr,
+                    province : city.split(" ")[0],
+                    city : city.split(" ")[1],
+                    county : city.split(" ")[2],
+                    combankcarnum1 : cardNumber,
+                    MainBankName : bankName,
+                    combankname1 : bankName2,
+                    combankcarname1 : cardName,
+                    combanksort1 : countType,
+                    SN : sn,
+                    mainid : dNumber
+                },
+                secureuri: false,
+                fileElementId: ['file_upload1','file_upload2','file_upload3','file_upload4','file_upload5','file_upload6'
+                    ,'file_upload7','file_upload8','file_upload9','file_upload10'],
+                dataType: 'JSON',
+                success: function(data, status){
+                    $('#myModalLabel').html("提示");
+                    $('.modal-body').html("提交成功");
+                    $('#myModal').modal();
+                    setTimeout(function(){
+                        $('#myModal').modal('hide');
+                        if ((navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i))) {
+                            window.location.href = "https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzI0NTYyOTkyOQ==&scene=110#wechat_redirect";
+                        }
+                    },1000)
+                },
+                error: function(data, status, e){
+                    alert(e);
+                }
+            });
+        }
+
+        //获取URL参数值
+        function getQueryString(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null) return decodeURI(r[2]); return null;
+        }
+    });
+</script>
+</body>
+</html>

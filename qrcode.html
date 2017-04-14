@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta content="text/html; charset=UTF-8" http-equiv="content-type">
+    <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <title></title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <link rel="stylesheet" href="css/progress.css">
+    <link rel="stylesheet" href="css/style.css">
+    <script rel="stylesheet" src="js/jquery-1.11.1.min.js"></script>
+    <script rel="stylesheet" src="js/qrcode.js"></script>
+</head>
+<body>
+<div id="top"></div>
+<header>
+    <a href="index.html" class="header_left">
+        <img src="images/left.png"/>
+    </a>
+    <h1>店铺收款码</h1>
+</header>
+
+<div class="code_container">
+    <div class="code_bg">
+        <img src="images/photo2x.png" />
+        <div id="qrcode"></div>
+    </div>
+    <p class="code_text">*保存后可自行打印</p>
+    <div class="code_save">
+        <input type="button" value="保存到相册" />
+    </div>
+    <div id="imgBox" align="center"></div>
+</div>
+
+<script>
+    $(function () {
+        var token = getQueryString("token");
+        var height = $(window).height();
+        $('.header_left').attr("href", "index.html?token=" + token);
+        $(".code_container").css('height', height - 61);
+
+        /*二维码*/
+        var code = new QRCode('qrcode', {
+            text: 'www.7tianfu.cn',
+            width: 170,
+            height: 170,
+            colorDark : '#000000',
+            colorLight : '#ffffff',
+            correctLevel : QRCode.CorrectLevel.H
+        });
+
+        $('.code_save').find('input').click(function(){
+
+            var image = new Image();
+            var code = document.getElementById("qrcode");
+            
+            image.src = code.getElementsByTagName("img")[0].src;
+            image.onload=function(){
+
+                var data=[], base64=[];
+                data[0] = 'images/photo2x.png';
+                data[1] = image.src;
+                hecheng();//合成图片
+                /*图片合成*/
+                function hecheng(){
+                    draw(function(){
+                        document.getElementById('imgBox').innerHTML='<img src="'+base64[0]+'">';
+                        window.open(base64[0]);
+                    })
+                }
+                function draw(fn){
+                    var c=document.createElement('canvas'),
+                            ctx=c.getContext('2d'),
+                            len=data.length;
+                    c.width=600;
+                    c.height=850;
+                    ctx.rect(0,0,c.width,c.height);
+                    ctx.fillStyle='#fff';
+                    ctx.fill();
+                    function drawing(n){
+                        if(n<len){
+                            var img=new Image;
+                            //img.crossOrigin = 'Anonymous'; //解决跨域
+                            img.src=data[n];
+                            img.onload=function(){
+                                if(n==1){
+                                    ctx.drawImage(img,131,336,338,338);
+                                }else {
+                                    ctx.drawImage(img,0,0,600,850);
+                                }
+                                drawing(n+1);//递归
+                            }
+                        }else{
+                            //保存生成作品图片
+                            base64.push(c.toDataURL("image/jpeg",1));
+                            console.log(base64[0]);
+                            //alert(JSON.stringify(base64));
+                            fn();
+                        }
+                    }
+                    drawing(0);
+                }
+            };
+        });
+
+        //提交的参数
+        /*var j = {
+         "AppId": "B207E275A16C41CB903A3E1CF1539995",
+         "CCD": 7008,
+         "Token": token
+         };
+         $.ajax({
+         url: 'http://120.76.97.98:33512/UserService',
+         type: 'POST',
+         async: true,
+         contentType: "application/json; charset=utf-8",
+         processData: false,
+         data: JSON.stringify(j),
+         timeout: 5000,
+         dataType: 'json',
+         success: function (data, textStatus, jqXHR) {
+         var d = eval(data);
+         console.log(d.RCD);
+
+         },
+         error: function (xhr, textStatus) {
+         console.log('错误');
+         },
+         complete: function () {
+         console.log('结束')
+         }
+         });*/
+
+
+        //获取URL参数值
+        function getQueryString(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null) return unescape(r[2]);
+            return null;
+        }
+
+    })
+
+
+</script>
+</body>
+</html>

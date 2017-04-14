@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta content="text/html; charset=UTF-8" http-equiv="content-type">
+    <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <title></title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="" name="robots">
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/style.css">
+    <script rel="stylesheet" src="js/jquery-1.11.1.min.js"></script>
+    <script src="js/echarts.simple.min.js"></script>
+
+</head>
+<body style="overflow-y: hidden">
+<div class="cash">
+    <div class="cash_head">
+        <div class="cash_title">
+            <a id="rank_btn" href="#">排行榜</a>
+            昨日收益(元)
+            <a id="bar_btn" href="detail.html">收支明细</a>
+        </div>
+        <!--<div>昨天收益</div>-->
+        <div id="yincome"></div>
+    </div>
+    <div class="cash_shouyi">
+        <div>
+            <p>总金额(元)</p>
+            <span id="mincome"></span>
+        </div>
+        <div>
+            <p>累计收益</p>
+            <span id="tincome"></span>
+        </div>
+    </div>
+    <div id="chart"></div>
+
+    <div class="cash_btn" style="position: absolute;bottom: 0px;width: 100%;height: 82px;">
+        <a href="" id="turn_manageManager" style="position: absolute;width: 100%;height: 30px;padding: 5px;background-color: #fff;">
+            <img src="images/qian.png" style="position: absolute;left:10px;top: 5px;width: 20px;height: 20px;" />
+            <p id="cash_myProfit" style="position:absolute;left: 35px;top:5px;color:#000;" >我的理财(强烈推荐)</p>
+        </a>
+        <a style="position: absolute;width: 50%;color: #1892ff;text-align: center;line-height: 40px;box-sizing: border-box;border-right: 1px solid #c0c0c0;background-color: white;left: 0;bottom: 0;" class="cash_btn_l" href="turn_out.html" id="turn_out">转出</a>
+        <a style="position: absolute;width: 50%;color: #1892ff;text-align: center;line-height: 40px;box-sizing: border-box;border-right: 1px solid #c0c0c0;background-color: white;right: 0;bottom: 0;" class="cash_btn_r" href="turn_in.html" id="turn_in">转入</a>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+
+        var token = getQueryString("token");
+        var uid = getQueryString("uid");
+        $('#turn_out').attr("href","turn_out.html?token="+token+"&uid="+uid);
+        $('#turn_in').attr("href","turn_in.html?token="+token+"&uid="+uid);
+        $('#bar_btn').attr("href","detail.html?token="+token+"&uid="+uid);
+        $('#rank_btn').attr("href","rank.html?token="+token+"&uid="+uid);
+        $('#turn_manageManager').attr("href","manageMoney.html?token="+token+"&uid="+uid);
+
+       /* if((navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad)/i))) {
+            $("#cash_myProfit").css("top","0");
+        }*/
+        //提交的参数
+        var j = {
+            "AppId": "B207E275A16C41CB903A3E1CF1539995",
+            "CCD": 7001,
+            "Token": token
+        };
+        $.ajax({
+            url: 'http://120.76.97.98:33512/UserService',
+            type: 'POST',
+            async: true,
+            contentType: "application/json; charset=utf-8",
+            processData: false,
+            data: JSON.stringify(j),
+            timeout: 5000,
+            dataType: 'json',
+            success: function (data, textStatus, jqXHR) {
+                var d = eval(data);
+                var dateJson = d.data;
+                var date = [];//日期
+                var value = [];//数据
+
+                /*if(d.RCD != 0){
+                    if (confirm("账户信息已过时,请重新登录")==true){
+                        window.webkit.messageHandlers.PlaySound.postMessage('xxxxxxx');
+                        return true;
+                    }else{
+                        return false;
+                    }
+                }*/
+
+                var maxVal = d.MAXVALUE;
+                var minVal = d.MINVALUE;
+                for(var i=0;i<dateJson.length;i++){
+                    console.log(dateJson[i].TIME+":"+dateJson[i].VALUE);
+                    date[i] = dateJson[dateJson.length-i-1].TIME;
+                    value[i] = dateJson[dateJson.length-i-1].VALUE;
+                }
+                //初始化折线图数据
+                var myChart = echarts.init(document.getElementById('chart'));
+                var option = {
+                    title: {
+                        text: '七日收益金额(元)',
+                        x: '10px',
+                        textStyle: {
+                            fontSize: 14,
+                            fontWeight: 'bolder',
+                            color: '#666'          // 主标题文字颜色
+                        }
+                    },
+                    tooltip: {
+                        trigger: 'axis'
+                    },
+                    grid: {
+                        left: '10px',
+                        bottom: '10px',
+                        top: '20%',
+                        containLabel: true
+                    },
+                    xAxis: [
+                        {
+                            type: 'category',
+                            boundaryGap: false,
+                            axisLabel: {
+                                show: true,
+                                interval:0 ,
+                                formatter:function(val){
+                                    return val.split("/")[1]+"月"+val.split("/")[2]+"日";
+                                },
+                                textStyle: {
+                                    color: '#bdbdbd'
+                                }
+                            },
+                            axisLine: {
+                                lineStyle: {
+                                    color: '#bdbdbd',
+                                    width: 1
+                                }
+                            },
+                            data: date
+                        }
+                    ],
+                    yAxis: [
+                        {
+                            type: 'value',
+                            axisLabel: {
+                                show: true,
+                                textStyle: {
+                                    color: '#bdbdbd'
+                                }
+                            },
+                            axisLine: {
+                                lineStyle: {
+                                    color: '#bdbdbd',
+                                    width: 1
+                                }
+                            },
+                            splitNumber: 4,
+                            'min': minVal
+                        }
+                    ],
+                    series: [
+                        {
+                            name: '收益金额',
+                            type: 'line',
+                            stack: '总量',
+                            label: {
+                                normal: {
+                                    show: true,
+                                    position: 'top'
+                                }
+                            },
+                            lineStyle: {
+                                normal: {
+                                    width: 3,
+                                    color: "#ff5800"
+                                }
+                            },
+                            areaStyle: {
+                                normal: {
+                                    color: '#fff'
+                                }
+                            },
+                            data: value
+                        }
+                    ]
+                };
+                myChart.setOption(option);
+            },
+            error: function (xhr, textStatus) {
+                console.log('错误');
+            },
+            complete: function () {
+                console.log('结束')
+            }
+        });
+
+        //提交的参数
+        var y = {
+            "AppId": "B207E275A16C41CB903A3E1CF1539995",
+            "CCD": 7004,
+            "Token": token
+        };
+        $.ajax({
+            url: 'http://120.76.97.98:33512/UserService',
+            type: 'POST',
+            async: true,
+            contentType: "application/json; charset=utf-8",
+            processData: false,
+            data: JSON.stringify(y),
+            timeout: 5000,
+            dataType: 'json',
+            success: function (data, textStatus, jqXHR) {
+
+                var yincome = data.YINCOME;//昨日收益
+                var mincome = data.MINCOME;//万份收益
+                var tincome = data.TINCOME;//累计收益
+                console.log("RCD"+data.RCD);
+                $('#yincome').html(yincome);
+                $('#mincome').html(mincome);
+                $('#tincome').html(tincome);
+            },
+            error: function (xhr, textStatus) {
+                console.log('错误');
+            },
+            complete: function () {
+                console.log('结束')
+            }
+        });
+
+        //获取URL参数值
+        function getQueryString(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null) return unescape(r[2]); return null;
+        }
+    });
+
+</script>
+</body>
+</html>

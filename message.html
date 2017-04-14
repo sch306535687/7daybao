@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta content="text/html; charset=UTF-8" http-equiv="content-type">
+    <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <title></title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <link rel="stylesheet" href="css/progress.css">
+    <link rel="stylesheet" href="css/style.css">
+    <script rel="stylesheet" src="js/jquery-1.11.1.min.js"></script>
+</head>
+<body>
+<div id="top" class="blue"></div>
+<header class="blue" style="border: none">
+    <h1>消息</h1>
+</header>
+<div class="message">
+    <ul id="message_list">
+        <!--<li>
+            <div class="message_time">2016-1-1 11:25</div>
+            <div class="message_body">
+                <img src="images/msg.png" />
+                <p>4折购买卡器,快速提升刷卡效率,vip商户专享!致电400-666-8777了解详情</p>
+                <a href="#">#戳我享优惠</a>
+            </div>
+        </li>-->
+    </ul>
+    <div class="dropload-down">
+        <div class="dropload-load">
+            加载中<p class="loading"></p>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        var token = getQueryString("token");
+        var width = $(window).width();
+        var height = $(window).height();
+        var page = 1;
+        $(".message").css('height', height - 60);
+
+        ajax(page);//初始化数据
+
+        //滚动到底部
+        $("#message_list").scroll(debounce(delayScrollFn, 1000));
+
+        function debounce(fn, delay) {
+            // 维护一个 timer
+            var timer = null;
+            // 能访问 timer 的闭包
+            return function() {
+                // 通过 ‘this’ 和 ‘arguments’ 获取函数的作用域和变量
+                var context = this;
+                var args = arguments;
+                // 如果事件被调用，清除 timer 然后重新设置 timer
+                clearTimeout(timer);
+                timer = setTimeout(function() {
+                    fn.apply(context, args);
+                }, delay);
+            }
+        }
+
+        function delayScrollFn() {
+            var $this = $(this),
+                    viewH = $(this).height(),//可见高度
+                    contentH = $(this).get(0).scrollHeight,//内容高度
+                    scrollTop = $(this).scrollTop();//滚动高度
+            if ((contentH - viewH) == scrollTop) {
+                // 这里加载数据
+                $('.dropload-down').css("display", "block");
+                page++;
+                ajax(page);
+            }
+        }
+
+        function ajax(page) {
+            //提交的参数
+            var j = {
+                "offset": page
+            };
+            $.ajax({
+                url: 'http://120.76.97.98:8080/SevenDayRich/notice/getNotice',
+                type: 'POST',
+                async: true,
+                contentType: "application/json; charset=utf-8",
+                processData: false,
+                data: JSON.stringify(j),
+                timeout: 5000,
+                dataType: 'json',
+                success: function (data, textStatus, jqXHR) {
+                    var d = eval(data);
+                    var str = "";
+                    console.log(d.Data);
+                    if (d.Data.length == 0) {
+                        $('.dropload-down').css("display", "none");
+                        alert("已经没有数据了");
+                        return;
+                    }
+                    for (var i = 0,iLength=d.Data.length; i < iLength; i++) {
+                        for (var j = 0,jLength=d.Data[i].list.length; j <jLength ; j++) {
+                            str += '<li>\
+                                 <div class="message_time">' + d.Data[i].list[j].addtime.split(" ")[0] + '</div>\
+                                <div class="message_body">\
+                                 <img src="images/msg.png" />\
+                                 <p>' + d.Data[i].list[j].title + '</p>\
+                                 <a href="#">#戳我享优惠</a>\
+                                 </div>\
+                             </li>';
+                        }
+                    }
+                    if (page == 1) {
+                        $('#message_list').append(str);
+                    } else {
+                        setTimeout(function () {//延迟加载
+                            $('#message_list').append(str);
+                            $('.dropload-down').css("display", "none");
+                        }, 1000);
+                    }
+                    var msg = document.getElementsByClassName('message_body');
+                    for(var i= 0,len = msg.length;i<len;i++){
+                        var p = msg[i].getElementsByTagName('p')[0];
+                        p.style.width = width - 70 +"px";
+                    }
+                },
+                error: function (xhr, textStatus) {
+                    console.log('错误');
+                },
+                complete: function () {
+                    console.log('结束')
+                }
+            });
+        }
+
+
+        //获取URL参数值
+        function getQueryString(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null) return unescape(r[2]);
+            return null;
+        }
+
+    })
+
+
+</script>
+</body>
+</html>

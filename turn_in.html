@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta content="text/html; charset=UTF-8" http-equiv="content-type">
+    <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <meta charset="UTF-8">
+    <!-- uc强制竖屏 -->
+    <meta name="screen-orientation" content="portrait">
+    <!-- QQ强制竖屏 -->
+    <meta name="x5-orientation" content="portrait">
+    <meta name="x5-orientation" content="portrait">
+    <meta name="screen-orientation" content="portrait">
+    <meta name="x5-orientation" content="portrait">
+    <title></title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="" name="robots">
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/style.css">
+    <script rel="stylesheet" src="js/jquery-1.11.1.min.js"></script>
+    <script rel="stylesheet" src="js/bootstrap.min.js"></script>
+
+</head>
+<body>
+<div id="top"></div>
+<header>
+    <a href="index.html" class="header_left">
+        <img src="images/left.png" />
+    </a>
+    <h1>转入</h1>
+</header>
+<div class="getCash_content">
+    <div class="getCash_car">
+        <a>
+            <div class="selectCar_list_left">
+                <img src="images/img2.png" />
+            </div>
+            <div class="selectCar_list_text">
+                <p>账户余额</p>
+                <span id="balanceCount"></span>
+            </div>
+           <!-- <div class="selectCar_list_right">
+                <img src="images/right.png" />
+            </div>-->
+        </a>
+    </div>
+    <div class="getCash_money">
+        <!--<span>提现金额</span>-->
+        <div class="getCash_input">
+            <span>金额</span>
+            <input id="money" type="number"  />
+            <button class="add_all">转入全部</button>
+        </div>
+        <!--<p>可用余额0.00元</p>-->
+    </div>
+
+    <div class="selectCar_btn">
+        <input id="btn" data-toggle="modal" data-target="#myModal" type="button" value="下一步" disabled="disabled" />
+        <!--<p id="msg" style="display: block"></p>-->
+    </div>
+    <div id="radioBtn" style="position: absolute;width: 100%;height: 178px;bottom: 0px;background-color: #fff;">
+        <div id="deadTime">选择期限</div>
+    <a style="position: absolute;width:100%;height: 36px;text-align: center;text-underline: none;line-height: 36px;border-bottom: 1px solid #f0efef;top: 31px;"></a>
+    <a style="position: absolute;width:100%;height: 36px;text-align: center;text-underline: none;line-height: 36px;border-bottom: 1px solid #f0efef;top: 67px;"></a>
+    <a style="position: absolute;width:100%;height: 36px;text-align: center;text-underline: none;line-height: 36px;border-bottom: 1px solid #f0efef;top: 103px;"></a>
+    <a style="position: absolute;width:100%;height: 36px;text-align: center;text-underline: none;line-height: 36px;border-bottom: 1px solid #f0efef;top: 139px;"></a>
+    </div>
+</div>
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width: 60%;height: 97px;position: absolute;left:20%;top: 40%;">
+        <div class="modal-content" style="border-radius: 10px">
+            <div class="modal-header" style="text-align: center;border-bottom: none;">
+                <h4 class="modal-title" id="myModalLabel" style="font-weight: 500">
+                    是否转入余额宝
+                </h4>
+            </div>
+            <div class="modal-footer" style="position: relative;height: 40px;">
+                <button type="button" data-dismiss="modal" style="position: absolute;width: 50%;height: 100%;right:0;top: 0;border: none;background: #fff;color: #157efb;">取消
+                </button>
+                <button id="modelBtn" type="button" style="position: absolute;width: 50%;height: 100%;left:0;top: 0;border: none;background: #fff;color: #157efb;">
+                    确定
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 模态框（Modal） -->
+
+<script>
+    $(function(){
+        var token = getQueryString("token");//获取token值
+        var uid = getQueryString("uid");
+        var height = $(window).height();
+        var money = 0;
+        $(".getCash_content").css('height',height-60);
+
+        //判断输入框有无内容
+        var oInput=$('.getCash_input').find('input');
+        var timer=setInterval(function(){
+            if(oInput.val()!=""){
+                money = $('#money').val();
+                $('.selectCar_btn').find('input').removeAttr('disabled');
+                $('.selectCar_btn').find('input').css('backgroundColor','#1892ff').css('color','white');
+            }else{
+                $('.selectCar_btn').find('input').css('backgroundColor','#c8c8c8').css('color','#969696');
+                $('.selectCar_btn').find('input').attr('disabled','disabled');
+            }
+        },500);
+
+        var month = getQueryString("month");//获取期限值
+        var checkedValue = '';
+        //7天宝类型枚举
+        var z = {
+            "AppId": "B207E275A16C41CB903A3E1CF1539995",
+            "CCD": 7007 ,
+            "Token": token
+        };
+        $.ajax({
+            url:'http://120.76.97.98:33512/UserService',
+            type:'POST',
+            async:true,
+            contentType: "application/json; charset=utf-8",
+            processData: false,
+            data:JSON.stringify(z),
+            timeout:5000,
+            dataType:'json',
+            success:function(data,textStatus,jqXHR){
+                var d = eval(data);
+                console.log('7天宝类型枚举'+ d.RCD);
+                for(var i=0;i< d.data.length;i++){
+                    console.log(d.data[i].INCREASE_NAME);
+                    $('#radioBtn').find('a').eq(i).html('<input  name="time" type="hidden" value='+d.data[i].IID+' />&nbsp;&nbsp;'+d.data[i].INCREASE_NAME+"(年化收益率"+d.data[i].FEE_RATE+""+d.data[i].UNIT+")");
+
+                }
+            },
+            error:function(xhr,textStatus){
+                console.log('错误');
+            },
+            complete:function(){
+                if(month!=null){
+                    if(month==1){
+                        $('#radioBtn').find('a').eq(0).css({'background-color':'#1892ff','color':'#fff'});
+                        checkedValue = $('#radioBtn').find('input').eq(0).val();
+                        console.log(month);
+                        console.log(checkedValue);
+                    }else if(month==3){
+                        $('#radioBtn').find('a').eq(1).css({'background-color':'#1892ff','color':'#fff'});
+                        checkedValue = $('#radioBtn').find('input').eq(1).val();
+                        console.log(month);
+                        console.log(checkedValue);
+                    }else if(month==6){
+                        $('#radioBtn').find('a').eq(2).css({'background-color':'#1892ff','color':'#fff'});
+                        checkedValue = $('#radioBtn').find('input').eq(2).val();
+                        console.log(month);
+                        console.log(checkedValue);
+                    }
+
+                }else {
+                    $('#radioBtn').find('a').eq(3).css({'background-color':'#1892ff','color':'#fff'});
+                    checkedValue = $('#radioBtn').find('input').eq(3).val();
+                    console.log(checkedValue);
+                }
+
+                $('#radioBtn a').click(function(){
+                    $(this).css({'background-color':'#1892ff','color':'#fff'}).siblings().css({'background-color':'','color':''});
+                    console.log($(this).find('input').val());
+                    checkedValue =$(this).find('input').val();
+                });
+            }
+        });
+
+
+
+       /* var labels = $('#radioBtn label');
+        for( var i=0;i<labels.length;i++ ){
+            (function(a){
+                labels[a].addEventListener("touchstart", function(){
+                    $(this).addClass("active").siblings().removeClass("active");
+                    console.log($(this).find('input').val());
+                    checkedValue =$(this).find('input').val();
+                });
+            })(i)
+        }*/
+
+        $('.header_left').attr("href","index.html?token="+token+"&uid="+uid);
+
+        //获取余额
+        var v = '';
+        var j = {
+            "AppId": "B207E275A16C41CB903A3E1CF1539995",
+            "CCD": 4003 ,
+            "Token": token
+        };
+        $.ajax({
+            url:'http://120.76.97.98:33512/UserService',
+            type:'POST',
+            async:true,
+            contentType: "application/json; charset=utf-8",
+            processData: false,
+            data:JSON.stringify(j),
+            timeout:5000,
+            dataType:'json',
+            success:function(data,textStatus,jqXHR){
+                var d = eval(data);
+                $('#balanceCount').html("账户可用金额"+d.BalanceCount+"元");
+                v = d.BalanceCount;
+            },
+            error:function(xhr,textStatus){
+                console.log('错误');
+            },
+            complete:function(){
+                $('.add_all').click(function(){
+                    $('#money').val(v);
+                });
+            }
+        });
+
+
+
+        //提交金额
+        $('#modelBtn').click(function(){
+            //提交的参数
+            var j = {
+                "AppId": "B207E275A16C41CB903A3E1CF1539995",
+                "CCD": 7003,
+                "Token": token,
+                "MoneyCount":money,
+                "TimeValue":checkedValue
+            };
+            $.ajax({
+                url:'http://120.76.97.98:33512/UserService',
+                type:'POST',
+                async:true,
+                contentType: "application/json; charset=utf-8",
+                processData: false,
+                data:JSON.stringify(j),
+                timeout:5000,
+                dataType:'json',
+                success:function(data,textStatus,jqXHR){
+                    var d = eval(data);
+                    console.log("数据"+ d.RCD);
+                    var rcd = d.RCD;
+                    $('#money').val("");//清空输入框
+                    if((navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i))) {
+                        window.location.href="./turn_in_tips.html?rcd="+rcd+"&money="+money+"&token="+token+"&uid="+uid;
+                    }
+                },
+                error:function(xhr,textStatus){
+                    console.log('错误');
+                },
+                complete:function(){
+                    console.log('结束')
+                }
+            })
+        });
+
+        //获取URL参数值
+        function getQueryString(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null) return unescape(r[2]); return null;
+        }
+
+    })
+</script>
+</body>
+</html>
