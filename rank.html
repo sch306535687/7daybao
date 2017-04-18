@@ -23,9 +23,9 @@
             <label class="rank_tab_pro tab_pro_active">收益排行</label>
             <label class="rank_tab_tou">投资排行</label>
         </div>
-        <a href="#" class="header_right" style="color: #fff">
+        <!--<a href="#" class="header_right" style="color: #fff">
             我的收益
-        </a>
+        </a>-->
     </header>
 
     <div class="rank_container">
@@ -84,7 +84,7 @@
         console.log(uid);
         var height = $(window).height();
         $('.header_left').attr("href", "http://120.76.97.98:33512/7daybao/index.html?token=" + token+"&uid="+uid);
-        $('.header_right').attr("href", "http://120.76.97.98:33512/7daybao/myProfit.html?token=" + token+"&uid="+uid);
+        /*$('.header_right').attr("href", "http://120.76.97.98:33512/7daybao/myProfit.html?token=" + token+"&uid="+uid);*/
         $('.rank_bottom_up').attr("href", "http://120.76.97.98:33512/7daybao/turn_in.html?token=" + token+"&uid="+uid);
         $(".rank_container").css('height', height - 121);
 

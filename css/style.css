@@ -1175,7 +1175,7 @@ header h1 {
     width: 170px;
     height: 170px;
     left: 65px;
-    top: 167px;
+    top: 97px;
 }
 .code_text {
     position: absolute;
@@ -1206,7 +1206,7 @@ header h1 {
         width: 125px;
         height: 125px;
         left: 50px;
-        top: 122px;
+        top: 72px;
     }
 }
 @media screen and (min-width: 414px) {
@@ -1222,7 +1222,7 @@ header h1 {
         width: 200px;
         height: 200px;
         left: 75px;
-        top: 197px;
+        top: 117px;
     }
 }
 
