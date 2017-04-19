@@ -1550,7 +1550,237 @@ input[type=button], input[type=submit], input[type=file], button { cursor: point
     background-color: #368df4;
 }
 
+/*刷卡返回*/
+.cardReturn_container {
+    background-color: #f0f0f0;
+    font-family: "黑体";
+}
+.cardReturn_top {
+    padding-left: 40px;
+    background-color: #fff;
+}
+.cardReturn_top_time {
+    color: #479cfc;
+    font-size: 14px;
+    line-height: 26px;
+}
+.cardReturn_top_money {
+    color: #2089fb;
+    font-size: 30px;
+    font-weight: 600;
+    line-height: 36px;
+}
+.cardReturn_body {
+    margin: 10px 10px 0;
+    border-radius: 5px;
+    box-sizing: border-box;
+    background-color: #fff;
+    overflow: scroll;
+}
+.cardReturn_body_title {
+    height: 26px;
+    position: relative;
+    border-bottom: 1px solid #efefef;
+}
+.cardReturn_body_title1, .cardReturn_body_title2, .cardReturn_body_title3  {
+    position: absolute;
+    width: 33%;
+    color: #3f3f3f;
+    text-align: center;
+    line-height: 26px;
+}
+.cardReturn_body_title1 {
+    left: 0;
+    top: 0;
+}
+.cardReturn_body_title2{
+    left: 33%;
+    top: 0;
+}
+.cardReturn_body_title3 {
+    width: 34%;
+    right: 0;
+    top: 0;
+}
+.cardReturn_list {
+    height: 40px;
+    position: relative;
+    border-bottom: 1px solid #efefef;
+}
+.cardReturn_list_time, .cardReturn_list_msg, .cardReturn_list_money {
+    position: absolute;
+    width: 33%;
+    text-align: center;
+    line-height: 40px;
+}
+.cardReturn_list_time {
+    left: 0;
+    top: 0;
+    color: #969696;
+    font-size: 14px;
+    line-height: 20px;
+}
+.cardReturn_list_msg {
+    left: 33%;
+    top: 0;
+    color: #777777;
+}
+.cardReturn_list_money {
+    width: 34%;
+    right: 0;
+    top: 0;
+    color: #fd7c3c;
+}
+.green {
+    color: #2ebb70;
+}
 
+/*刷卡查询*/
+.cardSearch_container {
+    padding: 2px;
+    background-color: #f0f0f0;
+    box-sizing: border-box;
+    overflow: scroll;
+}
+.cardSearch_container li {
+    position: relative;
+    width: 96%;
+    height: 120px;
+    left: 2%;
+    border-radius: 5px;
+    background-color: #fff;
+    margin-top: 10px;
+}
+.cardSearch_container li a {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+.cardSearch_left {
+    position: absolute;
+    width: 90%;
+    height: 100%;
+    left: 0;
+    top: 0;
+}
+.cardSearch_right {
+    position: absolute;
+    width: 20px;
+    height: 100%;
+    right: 0;
+    top: 0;
+    color: #fff;
+    text-align: center;
+    line-height: 40px;
+    font-size: 14px;
+    background-color: #fa7d4d;
+    border-radius: 0 5px 5px 0;
+}
+.cardSearch_left_top {
+    height: 36px;
+}
+.cardSearch_left_text {
+    position: absolute;
+    width: 50%;
+    height: 24px
+    left: 0;
+    top: 0;
+    text-align: left;
+    font-size: 14px;
+    padding-left: 10px;
+}
+.cardSearch_left_text span {
+    position: relative;
+    display: block;
+    width: 80px;
+    height: 18px;
+    top: 9px;
+    line-height: 18px;
+    color: #fff;
+    text-align: center;
+    border-radius: 10px;
+    background-color: #2a96f9;
+}
+.cardSearch_left_time {
+    position: absolute;
+    width: 50%;
+    height: 24px;
+    right: 0;
+    top: 0;
+    text-align: right;
+    font-size: 14px;
+    line-height: 36px;
+    padding-right: 10px;
+}
+.cardSearch_left_middle {
+    position: relative;
+    height: 48px;
+    font-size: 20px;
+    line-height: 48px;
+    text-align: center;
+}
+@media screen and (max-width: 320px) {
+    .cardSearch_left_middle {
+        font-size: 16px;
+    }
+}
+.cardSearch_left_middle span {
+    font-size: 14px;
+}
+.cardSearch_middle_total {
+    position: absolute;
+    width: 45%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    color: #ff6f5b;
+    overflow: hidden;
+}
+.cardSearch_middle_return {
+    position: absolute;
+    width: 30%;
+    height: 100%;
+    left: 45%;
+    top: 0;
+}
+.cardSearch_middle_count {
+    position: absolute;
+    width: 25%;
+    height: 100%;
+    right: 0;
+    top: 0;
+}
+.cardSearch_left_bottom {
+    position: relative;
+    height: 36px;
+    color: #c9c9c9;
+    font-size: 14px;
+    text-align: center;
+}
+.cardSearch_bottom_total {
+    position: absolute;
+    width: 45%;
+    line-height: 36px;
+    left: 0;
+    top: 0;
+}
+.cardSearch_bottom_return {
+    position: absolute;
+    width: 30%;
+    line-height: 36px;
+    left: 45%;
+    top: 0;
+}
+.cardSearch_bottom_count {
+    position: absolute;
+    width: 25%;
+    line-height: 36px;
+    right: 0;
+    top: 0;
+}
+.gray {
+    background-color: #c8c8c8;
+}
 
 
 

@@ -16,7 +16,7 @@
 <body>
 <div id="top"></div>
 <header>
-    <a href="index.html" class="header_left">
+    <a href="javascript:window.contactjs.returnBack()" class="header_left">
         <img src="images/left.png"/>
     </a>
     <h1>店铺收款码</h1>
@@ -29,10 +29,9 @@
     </div>
     <p class="code_text">*保存后可自行打印</p>
     <div class="code_save">
-        <input type="button" value="长按二维码保存图片"  />
+        <input type="button" value="保存图片到相册"  />
     </div>
     <!--<div id="imgBox" align="center"></div>-->
-    <img id="picture" src="#" style="display: none" />
 </div>
 
 <script>
@@ -40,7 +39,6 @@
         var token = getQueryString("token");
         var height = $(window).height();
         var url = "";
-        $('.header_left').attr("href", "index.html?token=" + token);
         $(".code_container").css('height', height - 61);
 
         //提交的参数
@@ -72,9 +70,72 @@
                          correctLevel : QRCode.CorrectLevel.H
                      });
 
-                     setTimeout(function(){
-                         $('.code_save').find('input').click();
-                     },1000);
+                     //合成图片
+                     $('.code_save').find('input').click(function(){
+                         var image = new Image();
+                         var code = document.getElementById("qrcode");
+
+                         image.src = code.getElementsByTagName("img")[0].src;
+                         image.onload=function(){
+
+                             var data=[], base64=[];
+                             data[0] = 'images/photo2x.png';
+                             data[1] = image.src;
+                             hecheng();
+                             //合成图片
+                             function hecheng(){
+                                 draw(function(){
+                                     if(base64[0]!=null){
+                                         window.contactjs.getImgSrc(base64[0]);
+                                     }
+                                 })
+                             }
+                             //保存到本地
+                             /*function saveAs(Url){
+                              var blob=new Blob([''], {type:'application/octet-stream'});
+                              var url = URL.createObjectURL(blob);
+                              var a = document.createElement('a');
+                              a.href = Url;
+                              a.download = Url.replace(/(.*\/)*([^.]+.*)/ig,"$2").split("?")[0];
+                              var e = document.createEvent('MouseEvents');
+                              e.initMouseEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+                              a.dispatchEvent(e);
+                              URL.revokeObjectURL(url);
+                              }*/
+                             /*图片合成*/
+                             function draw(fn){
+                                 var c=document.createElement('canvas'),
+                                         ctx=c.getContext('2d'),
+                                         len=data.length;
+                                 c.width=600;
+                                 c.height=850;
+                                 ctx.rect(0,0,c.width,c.height);
+                                 ctx.fillStyle='#fff';
+                                 ctx.fill();
+                                 drawing(0);
+                                 function drawing(n){
+                                     if(n<len){
+                                         var img=new Image;
+                                         //img.crossOrigin = 'Anonymous'; //解决跨域
+                                         img.src=data[n];
+                                         img.onload=function(){
+                                             if(n==1){
+                                                 ctx.drawImage(img,131,200,338,338);
+                                             }else {
+                                                 ctx.drawImage(img,0,0,600,850);
+                                             }
+                                             drawing(n+1);//递归
+                                         }
+                                     }else{
+                                         //保存生成作品图片
+                                         base64.push(c.toDataURL("image/jpeg",1));
+                                         fn();
+                                     }
+                                 }
+
+                             }
+                         };
+                     });
 
                  }
 
@@ -84,74 +145,6 @@
              complete: function () {
              }
          });
-
-        //合成图片
-        $('.code_save').find('input').click(function(){
-            var image = new Image();
-            var code = document.getElementById("qrcode");
-
-            image.src = code.getElementsByTagName("img")[0].src;
-            image.onload=function(){
-
-                var data=[], base64=[];
-                data[0] = 'images/photo2x.png';
-                data[1] = image.src;
-                hecheng();
-                //合成图片
-                function hecheng(){
-                    draw(function(){
-                        //window.open(base64[0]);
-                        //saveAs(base64[0]);
-                        $("#picture").attr('src',base64[0]);
-                    })
-                }
-                //保存到本地
-                function saveAs(Url){
-                    var blob=new Blob([''], {type:'application/octet-stream'});
-                    var url = URL.createObjectURL(blob);
-                    var a = document.createElement('a');
-                    a.href = Url;
-                    a.download = Url.replace(/(.*\/)*([^.]+.*)/ig,"$2").split("?")[0];
-                    var e = document.createEvent('MouseEvents');
-                    e.initMouseEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
-                    a.dispatchEvent(e);
-                    URL.revokeObjectURL(url);
-                }
-                /*图片合成*/
-                function draw(fn){
-                    var c=document.createElement('canvas'),
-                            ctx=c.getContext('2d'),
-                            len=data.length;
-                    c.width=600;
-                    c.height=850;
-                    ctx.rect(0,0,c.width,c.height);
-                    ctx.fillStyle='#fff';
-                    ctx.fill();
-                    drawing(0);
-                    function drawing(n){
-                        if(n<len){
-                            var img=new Image;
-                            //img.crossOrigin = 'Anonymous'; //解决跨域
-                            img.src=data[n];
-                            img.onload=function(){
-                                if(n==1){
-                                    ctx.drawImage(img,131,200,338,338);
-                                }else {
-                                    ctx.drawImage(img,0,0,600,850);
-                                }
-                                drawing(n+1);//递归
-                            }
-                        }else{
-                            //保存生成作品图片
-                            base64.push(c.toDataURL("image/jpeg",1));
-                            //console.log(base64[0]);
-                            fn();
-                        }
-                    }
-
-                }
-            };
-        });
 
         //获取URL参数值
         function getQueryString(name) {

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta content="text/html; charset=UTF-8" http-equiv="content-type">
+    <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <title></title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <link rel="stylesheet" href="css/progress.css">
+    <link rel="stylesheet" href="css/style.css">
+    <script rel="stylesheet" src="js/jquery-1.11.1.min.js"></script>
+    <script rel="stylesheet" src="js/qrcode.js"></script>
+</head>
+<body>
+<div id="top"></div>
+<header>
+    <a href="index.html" class="header_left">
+        <img src="images/left.png"/>
+    </a>
+    <h1>查看返还</h1>
+</header>
+
+<div class="cardReturn_container">
+    <div class="cardReturn_top">
+        <div class="cardReturn_top_time">刷卡时间：2017-04-13</div>
+        <div class="cardReturn_top_money">1,000.00</div>
+    </div>
+    <div class="cardReturn_body">
+        <div class="cardReturn_body_title">
+            <div class="cardReturn_body_title1">日期</div>
+            <div class="cardReturn_body_title2">内容</div>
+            <div class="cardReturn_body_title3">金额</div>
+        </div>
+        <div class="cardReturn_list">
+            <div class="cardReturn_list_time">
+                <p>2017-04-13</p>
+                <p>10:48</p>
+            </div>
+            <div class="cardReturn_list_msg">返还金额</div>
+            <div class="cardReturn_list_money">+14.00</div>
+        </div>
+        <div class="cardReturn_list">
+            <div class="cardReturn_list_time">
+                <p>2017-04-13</p>
+                <p>10:48</p>
+            </div>
+            <div class="cardReturn_list_msg">提现</div>
+            <div class="cardReturn_list_money green">+14.0000000</div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        var token = getQueryString("token");
+        var height = $(window).height();
+        $('.header_left').attr("href", "index.html?token=" + token);
+        $(".cardReturn_container").css('height', height - 61);
+        $(".cardReturn_body").css('height', height - 133);
+
+        //提交的参数
+        var j = {
+         "AppId": "B207E275A16C41CB903A3E1CF1539995",
+         "CCD": 6006,
+         "Token": token
+         };
+        /* $.ajax({
+             url: 'http://120.76.97.98:33512/UserService',
+             type: 'POST',
+             async: true,
+             contentType: "application/json; charset=utf-8",
+             processData: false,
+             data: JSON.stringify(j),
+             timeout: 5000,
+             dataType: 'json',
+             success: function (data, textStatus, jqXHR) {
+             var d = eval(data);
+                console.log(d)
+             },
+             error: function (xhr, textStatus) {
+             },
+             complete: function () {
+             }
+         });*/
+
+
+        //获取URL参数值
+        function getQueryString(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null) return unescape(r[2]);
+            return null;
+        }
+
+    })
+
+</script>
+</body>
+</html>
