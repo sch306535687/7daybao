@@ -36,6 +36,8 @@ textarea {
     overflow:auto;
 }
 
+/*苹果手机上input的button按钮颜色显示发白问题,*/
+input[type=button], input[type=submit], input[type=file], button { cursor: pointer; -webkit-appearance: none; }
 /*移除HTML5 input在type="number"时的上下小箭头*/
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button{
@@ -1273,8 +1275,6 @@ header h1 {
     font-size: 14px;
 }
 
-/*苹果手机上input的button按钮颜色显示发白问题,*/
-input[type=button], input[type=submit], input[type=file], button { cursor: pointer; -webkit-appearance: none; }
 /*微信支付页面*/
 .pay_container {
     position: relative;

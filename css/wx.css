@@ -1,0 +1,354 @@
+/*  reset */
+html {
+    width: 100%;
+    height: 100%;
+}
+body {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    font-family:"微软雅黑";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+body,h1,h2,h3,h4,h5,p,ul,ol,form,input,textarea,select {
+    margin:0;
+    padding:0;
+}
+em { font-style:normal; }
+li { list-style:none; }
+a { text-decoration:none;
+    color: black;
+}
+
+img {
+    border:none;
+    vertical-align:top;
+}
+input,textarea {
+    outline:none;
+    /*-webkit-appearance: none;*/
+}
+textarea {
+    resize:none;
+    overflow:auto;
+}
+
+/*苹果手机上input的button按钮颜色显示发白问题,*/
+input[type=button], input[type=submit], input[type=file], button { cursor: pointer; -webkit-appearance: none; }
+/*移除HTML5 input在type="number"时的上下小箭头*/
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button{
+    -webkit-appearance: none !important;
+    margin: 0;
+}
+input[type="number"]{-moz-appearance:textfield;}
+/*
+Chrome下，设置小于12px字体，显示仍为12px,解决办法加入下列样式：
+	-webkit-text-size-adjust:none;
+*/
+/* end reset */
+
+.wx_normal img {
+    width: 100%;
+}
+.wx_red {
+    height: 260px;
+    color: #fff;
+    background: -webkit-linear-gradient(#f72155, #d92378); /* Safari 5.1 - 6.0 */
+    background: -o-linear-gradient(#f72155, #d92378); /* Opera 11.1 - 12.0 */
+    background: -moz-linear-gradient(#f72155, #d92378); /* Firefox 3.6 - 15 */
+    background: linear-gradient(#f72155, #d92378); /* 标准的语法 */
+}
+.wx_logo {
+    text-align: center;
+    margin-bottom: 30px;
+}
+.wx_logo img {
+    width: 60px;
+}
+.wx_t1 {
+    font-size: 36px;
+    line-height: 60px;
+    padding-left: 20px;
+}
+.wx_t2 {
+    font-family: "黑体";
+    line-height: 36px;
+    padding-left: 20px;
+}
+.wx_pup {
+    position: relative;
+    height: 500px;
+    background-color: #7d39aa;
+}
+.wx_pup_white {
+    position: absolute;
+    width: 86%;
+    height: 100%;
+    left: 7%;
+    background-color: #fff;
+}
+.wx_center {
+    color: #7e3bac;
+    font-size: 26px;
+    line-height: 48px;
+    text-align: center;
+    padding-top: 20px;
+}
+.wx_center img {
+    position: relative;
+    width: 20px;
+    left: 5px;
+    top: 14px
+}
+.wx_d {
+    position: relative;
+    height: 140px;
+    color: #7c39aa;
+}
+.wx_d_img, .wx_r_text {
+    position: absolute;
+    left: 10px;
+    top: 0;
+    width: 40%;
+}
+
+.wx_r_text {
+    top: 20px;
+    text-align: center;
+}
+.wx_d_img img {
+    position: absolute;
+    width: 100%;
+}
+.wx_d_text {
+    position: absolute;
+    right: 10px;
+    top: 20px;
+    width: 50%;
+    text-align: center;
+}
+.wx_r_img {
+    position: absolute;
+    right: 10px;
+    top: 0;
+    width: 40%;
+    text-align: center;
+}
+
+.wx_r_img img {
+    position: absolute;
+    width: 100%;
+    left: 0;
+    top: 0;
+}
+.wx_blue {
+    height: 900px;
+    color: #fff;
+    background: -webkit-linear-gradient(#02dfda, #039fdc); /* Safari 5.1 - 6.0 */
+    background: -o-linear-gradient(#02dfda, #039fdc); /* Opera 11.1 - 12.0 */
+    background: -moz-linear-gradient(#02dfda, #039fdc); /* Firefox 3.6 - 15 */
+    background: linear-gradient(#02dfda, #039fdc); /* 标准的语法 */
+}
+
+.wx_blue_title {
+    font-size: 26px;
+    text-align: center;
+    line-height: 48px;
+}
+.wx_blue_little {
+    padding: 10px;
+    font-size: 20px;
+    border-bottom: 1px solid #fff;
+}
+.wx_blue_text {
+    padding: 10px;
+    line-height: 26px;
+    font-size: 14px;
+}
+.wx_blue_normal {
+    padding: 10px;
+    font-size: 14px;
+}
+.wx_yellow {
+    padding-top: 20px;
+    height: 160px;
+    color: #fe0002;
+    text-align: center;
+    background: url("../pictures/wx6.jpg") no-repeat;
+    background-size: 100% 100%;
+}
+.wx_deep {
+    position: relative;
+    height: 620px;
+    color: #c9389f;
+    font-size: 14px;
+    background-color: #c8379e;
+}
+.wx_deep_white {
+    position: absolute;
+    width: 86%;
+    height: 100%;
+    left: 7%;
+    background-color: #fff;
+}
+.wx_deep_text {
+    padding: 10px;
+}
+.wx_deep_title {
+    font-size: 26px;
+    font-weight: 600;
+    text-align: center;
+    border-bottom: 1px solid #c9389f;
+}
+.wx_deep_main {
+    position: relative;
+    height: 100px;
+}
+.wx_deep_main img {
+    position: absolute;
+    width: 20%;
+    left: 15%;
+    top: 20px;
+}
+.wx_deep_main .wx_main_text {
+    position: absolute;
+    left: 40%;
+    top: 20px;
+}
+.wx_deep_yellow {
+    height: 850px;
+    color: #fff;
+    background: -webkit-linear-gradient(#f38e02, #f56e02); /* Safari 5.1 - 6.0 */
+    background: -o-linear-gradient(#f38e02, #f56e02); /* Opera 11.1 - 12.0 */
+    background: -moz-linear-gradient(#f38e02, #f56e02); /* Firefox 3.6 - 15 */
+    background: linear-gradient(#f38e02, #f56e02); /* 标准的语法 */
+}
+.wx_deep_yellow_title {
+    width: 120px;
+    padding-top: 20px;
+    margin-left: 20px;
+    font-size: 36px;
+    font-weight: 600;
+    border-bottom: 1px solid #fff;
+}
+.wx_deep_yellow_text {
+    font-family: "黑体";
+    text-indent: 2rem;
+    padding:  10px 20px 0;
+}
+.wx_deep_yellow_img {
+    padding: 20px 20px 10px;
+    text-align: center;
+}
+.wx_deep_yellow_img img {
+    width: 50%;
+}
+.wx_deep_yellow_card {
+    text-align: center;
+}
+.wx_deep_yellow_form {
+    position: relative;
+    height: 180px;
+    line-height: 30px;
+    color: #f75c00;
+    font-family: "黑体";
+}
+.wx__name, .wx_phone,.wx_msg_container, .wx_sub {
+    position: absolute;
+    width: 90%;
+    height: 30px;
+    left: 5%;
+    top: 10px;
+    padding-left: 10px;
+    border-radius: 5px;
+    background-color: #fff;
+    box-sizing: border-box;
+}
+.wx_phone {
+    top: 50px;
+}
+.wx_msg_container {
+    top: 90px;
+    padding: 0;
+    background-color: inherit;
+}
+.wx_msg {
+    width: 70%;
+    padding-left: 10px;
+    font-size: 14px;
+    border-radius: 5px;
+    background-color: #fff;
+}
+.wx__name input, .wx_phone input {
+    width: 70%;
+    font-size: 18px;
+    border: none;
+}
+.wx_msg input {
+    width: 60%;
+    font-size: 18px;
+    border: none;
+}
+#getMsg {
+    position: absolute;
+    width: 24%;
+    height: 100%;
+    right: 0;
+    top: 0;
+    color: #f75c00;
+    font-size: 12px;
+    border: none;
+    border-radius: 5px;
+    background-color: #fff770;
+}
+.wx_sub {
+    top: 130px;
+    padding: 0;
+    background-color: inherit;
+}
+.wx_sub input {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border: none;
+    color: #f75c00;
+    font-family: "黑体";
+    font-weight: 600;
+    border-radius: 5px;
+    background-color: #fff00d;
+}
+.wx_hotline {
+    color: #f75c00;
+    line-height: 36px;
+    text-align: center;
+    font-family: "黑体";
+    background-color: #fff00d;
+}
+@media screen and (max-width: 320px) {
+    .wx_msg input {
+        width: 50%;
+        font-size: 16px;
+    }
+    .wx_deep_yellow {
+        height: 920px;
+    }
+}
+@media screen and (min-width: 600px) {
+    .wx_d_img {
+        width: 30%;
+    }
+    .wx_r_img {
+        width: 30%;
+    }
+    .wx_blue {
+        height: 1000px;
+    }
+    .wx_deep_main img {
+        position: absolute;
+        width: 16%;
+        left: 15%;
+        top: 20px;
+    }
+}
