@@ -11,95 +11,180 @@
     <link rel="stylesheet" href="css/progress.css">
     <link rel="stylesheet" href="css/style.css">
     <script rel="stylesheet" src="js/jquery-1.11.1.min.js"></script>
-    <script rel="stylesheet" src="js/qrcode.js"></script>
+    <script rel="stylesheet" src="js/datePicker.js"></script>
 </head>
 <body>
-    <div id="top"></div>
-    <header>
-        <a href="index.html" class="header_left">
-            <img src="images/left.png"/>
-        </a>
-        <h1>刷卡查询</h1>
-    </header>
-    <ul class="cardSearch_container">
-        <li>
-            <a href="#">
-                <div class="cardSearch_left">
-                    <div class="cardSearch_left_top">
-                        <div class="cardSearch_left_text"><span>7天返还</span></div>
-                        <div class="cardSearch_left_time">刷卡时间:2017-04-19</div>
-                    </div>
-                    <div class="cardSearch_left_middle">
-                        <div class="cardSearch_middle_total">106565464.00<span>元</span></div>
-                        <div class="cardSearch_middle_return">14.00<span>元</span></div>
-                        <div class="cardSearch_middle_count">1/7</div>
-                    </div>
-                    <div class="cardSearch_left_bottom">
-                        <div class="cardSearch_bottom_total">刷卡金额</div>
-                        <div class="cardSearch_bottom_return">返还金额</div>
-                        <div class="cardSearch_bottom_count">返还次数</div>
-                    </div>
-                </div>
-                <div class="cardSearch_right">返还中</div>
-            </a>
-        </li>
-        <li>
-            <a href="#">
-                <div class="cardSearch_left">
-                    <div class="cardSearch_left_top">
-                        <div class="cardSearch_left_text"><span>7天返还</span></div>
-                        <div class="cardSearch_left_time">刷卡时间:2017-04-19</div>
-                    </div>
-                    <div class="cardSearch_left_middle">
-                        <div class="cardSearch_middle_total">105554554.00<span>元</span></div>
-                        <div class="cardSearch_middle_return">14.00<span>元</span></div>
-                        <div class="cardSearch_middle_count">7/7</div>
-                    </div>
-                    <div class="cardSearch_left_bottom">
-                        <div class="cardSearch_bottom_total">刷卡金额</div>
-                        <div class="cardSearch_bottom_return">返还金额</div>
-                        <div class="cardSearch_bottom_count">返还次数</div>
-                    </div>
-                </div>
-                <div class="cardSearch_right gray">已结束</div>
-            </a>
-        </li>
-    </ul>
+<div id="top"></div>
+<header>
+    <a href="" class="header_left">
+        <img src="images/left.png"/>
+    </a>
+
+    <h1>刷卡查询</h1>
+    <span id="datequery" class="header_right">
+        选择时间
+    </span>
+</header>
+<div id="list" style="position: relative;">
+    <ul class="cardSearch_container"></ul>
+    <div class="dropload-down">
+        <div class="dropload-load">
+            加载中<p class="loading"></p>
+        </div>
+    </div>
+</div>
+
+
 <script>
     $(function () {
         var token = getQueryString("token");
         var height = $(window).height();
         var width = $(window).width();
-        $('.header_left').attr("href", "index.html?token=" + token);
+        var d = new Date();
+        var year = d.getFullYear();
+        var month = d.getMonth()+1;
+        var date = d.getDate();
+        var stime = year+"-"+month+"-01";
+        var etime = year+"-"+month+"-"+date;
+        var PageIndex = 1;
         $(".cardSearch_container").css('height', height - 61);
-        $(".cardSearch_left").each(function(index,element){
-            $(this).css('width',width*0.96-20);
-        });
-        //提交的参数
-        var j = {
-         "AppId": "B207E275A16C41CB903A3E1CF1539995",
-         "CCD": 6006,
-         "Token": token
-         };
-        /* $.ajax({
-             url: 'http://120.76.97.98:33512/UserService',
-             type: 'POST',
-             async: true,
-             contentType: "application/json; charset=utf-8",
-             processData: false,
-             data: JSON.stringify(j),
-             timeout: 5000,
-             dataType: 'json',
-             success: function (data, textStatus, jqXHR) {
-             var d = eval(data);
-                console.log(d)
-             },
-             error: function (xhr, textStatus) {
-             },
-             complete: function () {
-             }
-         });*/
+        $("#list").css('height', height - 61);
 
+        ajax(stime,etime,PageIndex,0);
+        function ajax(stime,etime,PageIndex,TimeModel){
+            //提交的参数
+            var j = {
+                "AppId": "B207E275A16C41CB903A3E1CF1539995",
+                "CCD": 4006,
+                "Token": token,
+                "STime": stime,
+                "ETime": etime,
+                "PageSize": 10,
+                "PageIndex": PageIndex
+
+            };
+            $.ajax({
+                url: 'http://120.76.97.98:33512/UserService',
+                type: 'POST',
+                async: true,
+                contentType: "application/json; charset=utf-8",
+                processData: false,
+                data: JSON.stringify(j),
+                timeout: 5000,
+                dataType: 'json',
+                success: function (data, textStatus, jqXHR) {
+                    var results = "";
+                    var d = eval(data);
+                    var len = d.data.length;
+                    console.log(stime+"  "+etime);
+                    console.log(d.data);
+                    if(len>0){
+                        for(var i=0;i<len;i++){
+                            var times = d.data[i].TIMES;
+                            if (times < 7) {
+                                results += '<li>\
+                                    <a href="cardReturn.html?id='+d.data[i].ID+'&token='+token+'&money='+d.data[i].AMOUNT+'&time='+d.data[i].CREATETIME.split(" ")[0]+'">\
+                                    <div class="cardSearch_left">\
+                                        <div class="cardSearch_left_top">\
+                                            <div class="cardSearch_left_text"><span>7天返还</span></div>\
+                                            <div class="cardSearch_left_time">刷卡时间:'+d.data[i].CREATETIME.split(" ")[0]+'</div>\
+                                        </div>\
+                                        <div class="cardSearch_left_middle">\
+                                            <div class="cardSearch_middle_total">'+d.data[i].AMOUNT+'<span>元</span></div>\
+                                            <div class="cardSearch_middle_return">'+d.data[i].INCREASE_AMOUNT+'<span>元</span></div>\
+                                            <div class="cardSearch_middle_count">'+times+'/'+d.data[i].COUNT+'</div>\
+                                        </div>\
+                                        <div class="cardSearch_left_bottom">\
+                                            <div class="cardSearch_bottom_total">刷卡金额</div>\
+                                            <div class="cardSearch_bottom_return">返还金额</div>\
+                                            <div class="cardSearch_bottom_count">返还次数</div>\
+                                        </div>\
+                                    </div>\
+                                    <div class="cardSearch_right">返还中</div>\
+                                    </a>\
+                                </li>'
+                            }else if(times==7) {
+                                results += '<li>\
+                                    <a href="cardReturn.html?id='+d.data[i].ID+'token='+token+'">\
+                                    <div class="cardSearch_left">\
+                                        <div class="cardSearch_left_top">\
+                                            <div class="cardSearch_left_text"><span>7天返还</span></div>\
+                                            <div class="cardSearch_left_time">刷卡时间:'+d.data[i].CREATETIME+'</div>\
+                                        </div>\
+                                        <div class="cardSearch_left_middle">\
+                                            <div class="cardSearch_middle_total">'+d.data[i].AMOUNT+'<span>元</span></div>\
+                                            <div class="cardSearch_middle_return">'+d.data[i].INCREASE_AMOUNT+'<span>元</span></div>\
+                                            <div class="cardSearch_middle_count">'+d.data[i].times+'/'+d.data[i].COUNT+'</div>\
+                                        </div>\
+                                        <div class="cardSearch_left_bottom">\
+                                            <div class="cardSearch_bottom_total">刷卡金额</div>\
+                                            <div class="cardSearch_bottom_return">返还金额</div>\
+                                            <div class="cardSearch_bottom_count">返还次数</div>\
+                                        </div>\
+                                    </div>\
+                                    <div class="cardSearch_right gray">已结束</div>\
+                                    </a>\
+                                </li>'
+                            }
+                        }
+
+                        if(TimeModel==1){
+                            //时间选择模式,清空
+                            document.getElementsByClassName('cardSearch_container')[0].innerHTML = "";
+                        }
+                        document.getElementsByClassName('cardSearch_container')[0].innerHTML += results;
+                        $(".cardSearch_left").each(function (index, element) {
+                            $(this).css('width', width * 0.96 - 20);
+                        });
+                        $('.dropload-down').css("display", "none");
+                    }else {
+                        $('.dropload-down').css("display", "none");
+                    }
+
+                },
+                error: function (xhr, textStatus) {
+                },
+                complete: function () {
+                }
+            });
+        }
+
+        //分页
+        $(".cardSearch_container").scroll(function(){
+            var $this = $(this),
+                    viewH = $(this).height(),//可见高度
+                    contentH = $(this).get(0).scrollHeight,//内容高度
+                    scrollTop = $(this).scrollTop();//滚动高度
+            if ((contentH - viewH-4) == scrollTop) {
+                // 这里加载数据..
+                $('.dropload-down').css("display", "block");
+                PageIndex++;
+                setTimeout(function(){
+                    ajax(stime,etime,PageIndex);
+                },1000);
+
+            }
+        });
+
+        //日期选择
+        datequery();
+        function datequery(){
+            var calendar = new datePicker();
+
+            calendar.init({
+                'trigger': '#datequery',
+                'type': 'date',/*模式：date日期；datetime日期时间；time时间；ym年月；*/
+                'minDate':'2016-1-1',/*最小日期*/
+                'maxDate':etime,/*最大日期*/
+                'onSubmit':function(){/*确认时触发事件*/
+                    stime=calendar.value;
+                    PageIndex = 1;
+                    ajax(stime,etime,PageIndex,1);
+                },
+                'onClose':function(){/*取消时触发事件*/
+                }
+            });
+        }
 
         //获取URL参数值
         function getQueryString(name) {
@@ -108,9 +193,7 @@
             if (r != null) return unescape(r[2]);
             return null;
         }
-
     })
-
 </script>
 </body>
 </html>

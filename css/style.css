@@ -1634,9 +1634,14 @@ header h1 {
 .green {
     color: #2ebb70;
 }
-
+@media screen and (max-width: 320px) {
+    .cardReturn_list_time, .cardReturn_list_msg, .cardReturn_list_money {
+        font-size: 14px;
+    }
+}
 /*刷卡查询*/
 .cardSearch_container {
+    position: relative;
     padding: 2px;
     background-color: #f0f0f0;
     box-sizing: border-box;
@@ -1720,6 +1725,9 @@ header h1 {
     text-align: center;
 }
 @media screen and (max-width: 320px) {
+    .cardSearch_left_time {
+        font-size: 12px;
+    }
     .cardSearch_left_middle {
         font-size: 16px;
     }
