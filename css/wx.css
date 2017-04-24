@@ -160,7 +160,6 @@ Chrome下，设置小于12px字体，显示仍为12px,解决办法加入下列�
 .wx_blue_little {
     padding: 10px;
     font-size: 26px;
-    border-bottom: 1px solid #fff;
 }
 .wx_blue_text {
     padding: 10px;
@@ -200,7 +199,6 @@ Chrome下，设置小于12px字体，显示仍为12px,解决办法加入下列�
     font-size: 26px;
     font-weight: 600;
     text-align: center;
-    border-bottom: 1px solid #c9389f;
 }
 .wx_deep_main {
     position: relative;
@@ -231,7 +229,6 @@ Chrome下，设置小于12px字体，显示仍为12px,解决办法加入下列�
     margin-left: 20px;
     font-size: 36px;
     font-weight: 600;
-    border-bottom: 1px solid #fff;
 }
 .wx_deep_yellow_text {
     font-family: "黑体";
