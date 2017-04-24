@@ -144,7 +144,7 @@ Chrome下，设置小于12px字体，显示仍为12px,解决办法加入下列�
     top: 0;
 }
 .wx_blue {
-    height: 900px;
+    height: 920px;
     color: #fff;
     background: -webkit-linear-gradient(#02dfda, #039fdc); /* Safari 5.1 - 6.0 */
     background: -o-linear-gradient(#02dfda, #039fdc); /* Opera 11.1 - 12.0 */
@@ -216,7 +216,7 @@ Chrome下，设置小于12px字体，显示仍为12px,解决办法加入下列�
     top: 20px;
 }
 .wx_deep_yellow {
-    height: 850px;
+    height: 930px;
     color: #fff;
     background: -webkit-linear-gradient(#f38e02, #f56e02); /* Safari 5.1 - 6.0 */
     background: -o-linear-gradient(#f38e02, #f56e02); /* Opera 11.1 - 12.0 */
