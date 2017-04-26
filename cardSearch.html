@@ -16,7 +16,7 @@
 <body>
 <div id="top"></div>
 <header>
-    <a href="" class="header_left">
+    <a href="javascript:window.contactjs.returnBack()" class="header_left">
         <img src="images/left.png"/>
     </a>
 
@@ -76,7 +76,7 @@
                     var results = "";
                     var d = eval(data);
                     var len = d.data.length;
-                    console.log(stime+"  "+etime);
+                    //console.log(stime+"  "+etime);
                     if(len>0){
                         for(var i=0;i<len;i++){
                             var times = d.data[i].TIMES;

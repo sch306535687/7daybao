@@ -5,8 +5,6 @@ html {
 }
 body {
     position: relative;
-    width: 100%;
-    height: 100%;
     font-family:"微软雅黑";
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -252,7 +250,7 @@ Chrome下，设置小于12px字体，显示仍为12px,解决办法加入下列�
     color: #f75c00;
     font-family: "黑体";
 }
-.wx__name, .wx_phone,.wx_msg_container, .wx_sub {
+.wx__name, .wx_phone,.wx_msg_container, .wx_sub, #address {
     position: absolute;
     width: 90%;
     height: 30px;
@@ -288,6 +286,16 @@ Chrome下，设置小于12px字体，显示仍为12px,解决办法加入下列�
     font-size: 18px;
     border: none;
 }
+#address {
+    top: 90px;
+}
+#address input {
+    position: absolute;
+    width: 60%;
+    left: 85px;
+    top: 3px;
+    font-size: 18px;
+}
 #getMsg {
     position: absolute;
     width: 24%;
@@ -304,13 +312,13 @@ Chrome下，设置小于12px字体，显示仍为12px,解决办法加入下列�
     position: absolute;
     width: 90%;
     left: 5%;
-    top: 80px;
+    top: 120px;
     color: #fff;
     font-size: 14px;
     display: none;
 }
 .wx_sub {
-    top: 110px;
+    top: 150px;
     padding: 0;
     background-color: inherit;
 }
