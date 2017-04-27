@@ -30,7 +30,7 @@
 
     <div class="rank_container">
         <ul>
-           <!-- <li class="rank_top">
+            <!--<li class="rank_top">
                 <div class="rank_top_header">
                     <img class="rank_header rank_top_h2" src="images/rank1.png" />
                     <img class="rank_header rank_top_h1" src="images/rank_top_h1.png" />
@@ -42,7 +42,7 @@
                 <div class="rank_top_number">NO.1</div>
             </li>
             <li class="rank_normal">
-                <img class="rank_header" src="images/rank1.png" />
+                <div class="rank_default_name">萧明</div>
                 <div class="rank_msg">
                     <p>福州-王先生</p>
                     <span>总收益-￥800,000,00</span>
@@ -68,7 +68,7 @@
         </ul>
     </div>
     <div class="rank_bottom blue">
-        <img class="rank_header" src="images/rank1.png" />
+        <div class="rank_default_name">'+data.realname+'</div>
         <div class="rank_msg rank_bottom_msg" style="border-bottom: none">
 
         </div>
@@ -84,7 +84,6 @@
         console.log(uid);
         var height = $(window).height();
         $('.header_left').attr("href", "http://120.76.97.98:33512/7daybao/index.html?token=" + token+"&uid="+uid);
-        /*$('.header_right').attr("href", "http://120.76.97.98:33512/7daybao/myProfit.html?token=" + token+"&uid="+uid);*/
         $('.rank_bottom_up').attr("href", "http://120.76.97.98:33512/7daybao/turn_in.html?token=" + token+"&uid="+uid);
         $(".rank_container").css('height', height - 121);
 
@@ -118,17 +117,20 @@
                 dataType: 'json',
                 success: function (data, textStatus, jqXHR) {
                     var d = eval(data);
+                    var colors = ['red','#2ebb70','gray','#269abc','#02dfda','#039fdc'];
                     var result = "";
                     var myResult = d.Data.myTincome;
                     $('.rank_msg').html(myResult.realname);
                     $('.rank_number').html(myResult.ranking);
+                    $('.rank_default_name').html(myResult.realname).css('backgroundColor',colors[parseInt(3*Math.random())]);
 
                     for(var i=0;i<20;i++){
                         var data = d.Data.list[i];
+                        var rank = parseInt(6*Math.random());
                         if(i==0){
                             result += '<li class="rank_top">\
                                      <div class="rank_top_header">\
-                                     <img class="rank_header rank_top_h2" src="images/rank1.png" />\
+                                     <div class="rank_default_name rank_top_h2" style="background-color: '+colors[rank]+'">'+data.realname+'</div>>\
                                      <img class="rank_header rank_top_h1" src="images/rank_top_h1.png" />\
                                      </div>\
                                      <div class="rank_top_msg">\
@@ -139,7 +141,7 @@
                                  </li>'
                         } else if(i==1){
                             result += '<li class="rank_normal">\
-                                         <img class="rank_header" src="images/rank1.png" />\
+                                         <div class="rank_default_name" style="background-color: '+colors[rank]+'">'+data.realname+'</div>\
                                          <div class="rank_msg">\
                                          <p>'+data.c_name+'-'+data.realname+'</p>\
                                          <span>'+name+'-￥'+data.TINCOME+'</span>\
@@ -148,7 +150,7 @@
                                  </li>'
                         } else if(i==2){
                             result += '<li class="rank_normal">\
-                                     <img class="rank_header" src="images/rank1.png" />\
+                                     <div class="rank_default_name" style="background-color: '+colors[rank]+'">'+data.realname+'</div>\
                                      <div class="rank_msg">\
                                      <p>'+data.c_name+'-'+data.realname+'</p>\
                                      <span>'+name+'-￥'+data.TINCOME+'</span>\
@@ -157,7 +159,7 @@
                              </li>'
                         }else {
                             result += '<li class="rank_normal">\
-                                    <img class="rank_header" src="images/rank1.png" />\
+                                    <div class="rank_default_name" style="background-color: '+colors[rank]+'">'+data.realname+'</div>\
                                     <div class="rank_msg">\
                                     <p>'+data.c_name+'-'+data.realname+'</p>\
                                     <span>'+name+'-￥'+data.TINCOME+'</span>\
@@ -165,9 +167,11 @@
                                     <div class="rank_number">'+(i+1)+'</div>\
                                   </li>'
                         }
+
                     }
                     $('.rank_container').find('ul').html('');
                     $('.rank_container').find('ul').append(result);
+
                 },
                 error: function (xhr, textStatus) {
                     console.log('错误');
