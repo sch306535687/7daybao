@@ -71,6 +71,7 @@
              if(len>0){
                  for(var i=0;i<len;i++){
                      var m = d.data[i].AMOUNT;
+                     var content = d.data[i].CONTENT;
                      if(m>=0){
                          results += '<div class="cardReturn_list">\
                                  <div class="cardReturn_list_time">\
@@ -81,14 +82,26 @@
                                  <div class="cardReturn_list_money">'+m+'</div>\
                             </div>'
                      }else {
-                         results += '<div class="cardReturn_list">\
+                         if(content.length > 9){
+                             results += '<div class="cardReturn_list">\
                                  <div class="cardReturn_list_time">\
                                  <p>'+d.data[i].CREATETIME.split(" ")[0]+'</p>\
                                  <p>'+d.data[i].CREATETIME.split(" ")[1]+'</p>\
                                  </div>\
-                                 <div class="cardReturn_list_msg">'+d.data[i].CONTENT+'</div>\
+                                 <div class="cardReturn_list_msg" style="line-height: 20px;font-size: 14px;">'+content+'</div>\
                                  <div class="cardReturn_list_money green">'+m+'</div>\
                             </div>'
+                         }else {
+                             results += '<div class="cardReturn_list">\
+                                 <div class="cardReturn_list_time">\
+                                 <p>'+d.data[i].CREATETIME.split(" ")[0]+'</p>\
+                                 <p>'+d.data[i].CREATETIME.split(" ")[1]+'</p>\
+                                 </div>\
+                                 <div class="cardReturn_list_msg">'+content+'</div>\
+                                 <div class="cardReturn_list_money green">'+m+'</div>\
+                            </div>'
+                         }
+
                      }
 
                  }

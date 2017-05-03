@@ -75,10 +75,7 @@
                 success: function (data, textStatus, jqXHR) {
                     var results = "";
                     var d = eval(data);
-                    console.log(d)
-
                     var len = d.data.length;
-                    //console.log(stime+"  "+etime);
                     if(len>0){
                         for(var i=0;i<len;i++){
                             var times = d.data[i].TIMES;
@@ -106,7 +103,7 @@
                                 </li>'
                             }else if(times==7) {
                                 results += '<li>\
-                                    <a href="cardReturn.html?id='+d.data[i].ID+'token='+token+'">\
+                                    <a href="cardReturn.html?id='+d.data[i].ID+'&token='+token+'&money='+d.data[i].AMOUNT+'&time='+d.data[i].CREATETIME.split(" ")[0]+'">\
                                     <div class="cardSearch_left">\
                                         <div class="cardSearch_left_top">\
                                             <div class="cardSearch_left_text"><span>7天返还</span></div>\
