@@ -50,7 +50,7 @@
         $(".cardSearch_container").css('height', height - 61);
         $("#list").css('height', height - 61);
 
-        ajax(stime,etime,PageIndex,0);
+        ajax(stime,etime,PageIndex,0);//初始化单月数据
         function ajax(stime,etime,PageIndex,TimeModel){
             //提交的参数
             var j = {
@@ -75,6 +75,8 @@
                 success: function (data, textStatus, jqXHR) {
                     var results = "";
                     var d = eval(data);
+                    console.log(d)
+
                     var len = d.data.length;
                     //console.log(stime+"  "+etime);
                     if(len>0){
@@ -108,12 +110,12 @@
                                     <div class="cardSearch_left">\
                                         <div class="cardSearch_left_top">\
                                             <div class="cardSearch_left_text"><span>7天返还</span></div>\
-                                            <div class="cardSearch_left_time">刷卡时间:'+d.data[i].CREATETIME+'</div>\
+                                            <div class="cardSearch_left_time">刷卡时间:'+d.data[i].CREATETIME.split(" ")[0]+'</div>\
                                         </div>\
                                         <div class="cardSearch_left_middle">\
                                             <div class="cardSearch_middle_total">'+d.data[i].AMOUNT+'<span>元</span></div>\
                                             <div class="cardSearch_middle_return">'+d.data[i].INCREASE_AMOUNT+'<span>元</span></div>\
-                                            <div class="cardSearch_middle_count">'+d.data[i].times+'/'+d.data[i].COUNT+'</div>\
+                                            <div class="cardSearch_middle_count">'+times+'/'+d.data[i].COUNT+'</div>\
                                         </div>\
                                         <div class="cardSearch_left_bottom">\
                                             <div class="cardSearch_bottom_total">刷卡金额</div>\
