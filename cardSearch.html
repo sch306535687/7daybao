@@ -27,6 +27,9 @@
 </header>
 <div id="list" style="position: relative;">
     <ul class="cardSearch_container"></ul>
+    <div class="cardSearch_noData_bg">
+        <img src="images/no_data.png" />
+    </div>
     <div class="dropload-down">
         <div class="dropload-load">
             加载中<p class="loading"></p>
@@ -48,6 +51,7 @@
         var etime = year+"-"+month+"-"+date;
         var PageIndex = 1;
         $(".cardSearch_container").css('height', height - 61);
+        $(".cardSearch_noData_bg").find('img').css('top', (height-200)/2);
         $("#list").css('height', height - 61);
 
         ajax(stime,etime,PageIndex,0);//初始化单月数据
@@ -135,8 +139,10 @@
                             $(this).css('width', width * 0.96 - 20);
                         });
                         $('.dropload-down').css("display", "none");
+                        $(".cardSearch_noData_bg").css("display", "none");
                     }else {
                         $('.dropload-down').css("display", "none");
+                        $(".cardSearch_noData_bg").css("display", "block");
                     }
 
                 },
